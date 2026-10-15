@@ -68,7 +68,7 @@ export default async function HomePage() {
 
           <div
             id="bingo"
-            className="relative mx-auto w-full max-w-md"
+            className="relative mx-auto w-full max-w-md md:max-w-none"
             style={{ aspectRatio: "840 / 768" }}
           >
             {/* Marco decorativo: el pulpo abraza la tarjeta de avance */}
