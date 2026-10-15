@@ -171,10 +171,10 @@ export default async function HomePage() {
           <section className="border-t border-neutral-200 bg-neutral-50 py-16">
             <div className="mx-auto max-w-4xl px-6 text-center">
               <h2 className="text-2xl font-bold text-neutral-900">
-                Voces que se suman a esta causa
+                Corazones que ya se sumaron a este legado
               </h2>
               <p className="mt-2 text-neutral-600">
-                Gracias por confiar en {settings.teamName} ❤
+                Gracias por confiar en MAKU - Fundación Jesús es mi alegría ❤
               </p>
               <div className="mt-8">
                 <DonorsCarousel donations={donations} />
