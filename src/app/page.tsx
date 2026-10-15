@@ -167,41 +167,6 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className="border-t border-neutral-200 bg-white py-16">
-          <div className="mx-auto max-w-4xl px-6 text-center">
-            <h2 className="text-2xl font-bold text-neutral-900">
-              ¿Cómo puedo ayudar?
-            </h2>
-            <div className="mt-8 grid gap-6 md:grid-cols-2">
-              <div className="rounded-2xl border border-neutral-200 p-6 text-left">
-                <h3 className="font-semibold text-blue-700">
-                  1. Haz una donación
-                </h3>
-                <p className="mt-2 text-sm text-neutral-600">
-                  Transfiere cualquier monto a nuestra llave Bre-B y sube tu
-                  comprobante. Un administrador lo validará y se sumará a la
-                  meta.
-                </p>
-                <Link
-                  href="/donar"
-                  className="mt-4 inline-block text-sm font-semibold text-blue-700 hover:underline"
-                >
-                  Ir al formulario de donación →
-                </Link>
-              </div>
-              <div className="rounded-2xl border border-neutral-200 p-6 text-left">
-                <h3 className="font-semibold text-blue-700">
-                  2. Compra un cartón de bingo
-                </h3>
-                <p className="mt-2 text-sm text-neutral-600">
-                  Contacta a cualquier integrante de {settings.teamName}, ellos
-                  tienen cartones asignados para vender y reportar tu compra.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {donations.length > 0 && (
           <section className="border-t border-neutral-200 bg-neutral-50 py-16">
             <div className="mx-auto max-w-4xl px-6 text-center">
