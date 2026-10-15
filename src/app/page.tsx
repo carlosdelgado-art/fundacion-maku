@@ -21,8 +21,8 @@ export default async function HomePage() {
       />
 
       <main className="flex-1">
-        <section className="mx-auto grid max-w-[1800px] gap-10 px-6 py-12 md:grid-cols-[4fr_6fr] md:items-center lg:gap-16 lg:px-16">
-          <div>
+        <section className="mx-auto grid max-w-[1400px] gap-10 px-6 py-12 md:grid-cols-[1fr_auto] md:items-center lg:gap-16 lg:px-16">
+          <div className="max-w-xl">
             <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-700">
               ❤ Meta: {new Intl.NumberFormat("es-CO").format(stats.goal_amount)}{" "}
               COP
@@ -66,7 +66,7 @@ export default async function HomePage() {
 
           <div
             id="bingo"
-            className="relative mx-auto w-full max-w-md md:max-w-[400px]"
+            className="relative mx-auto w-full max-w-md md:w-[520px] md:max-w-[520px]"
             style={{ aspectRatio: "840 / 768" }}
           >
             {/* Marco decorativo: el pulpo abraza la tarjeta de avance */}
