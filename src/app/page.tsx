@@ -151,9 +151,7 @@ export default async function HomePage() {
                   Soñamos con que las personas con discapacidad no solo
                   reciban apoyo, sino que también tengan la oportunidad de
                   aportar, crecer y construir su propio camino, con
-                  posibilidades de inclusión y trabajo digno. Al mismo
-                  tiempo, queremos fortalecer la capacidad de la Fundación
-                  para seguir acompañando a quienes más lo necesitan.
+                  posibilidades de inclusión.
                 </p>
               </div>
             </div>
