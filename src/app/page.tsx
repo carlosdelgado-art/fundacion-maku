@@ -92,8 +92,9 @@ export default async function HomePage() {
             {settings.videoUrl && (
               <div className="mt-6 aspect-video overflow-hidden rounded-xl">
                 <iframe
-                  src={toYouTubeEmbedUrl(settings.videoUrl)}
+                  src={toYouTubeEmbedUrl(settings.videoUrl, { autoplay: true })}
                   className="h-full w-full"
+                  allow="autoplay; encrypted-media"
                   allowFullScreen
                 />
               </div>
