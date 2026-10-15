@@ -111,7 +111,7 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
             className="input"
           />
         </Field>
-        <Field label="URL del video (embed de YouTube, opcional)">
+        <Field label="URL del video (cualquier link de YouTube, opcional)">
           <input name="video_url" defaultValue={settings.videoUrl} className="input" />
         </Field>
         <div className="grid grid-cols-3 gap-3">

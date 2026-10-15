@@ -7,6 +7,7 @@ const LINKS = [
   { href: "/admin", label: "Resumen" },
   { href: "/admin/donaciones", label: "Donaciones" },
   { href: "/admin/cartones", label: "Cartones de bingo" },
+  { href: "/admin/cartones/ganador", label: "Verificar ganador" },
   { href: "/admin/integrantes", label: "Integrantes" },
   { href: "/admin/configuracion", label: "Configuración" },
 ];

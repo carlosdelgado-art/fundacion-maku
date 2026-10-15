@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { ProgressBar } from "@/components/ProgressBar";
 import { getSettings } from "@/lib/settings";
 import { getPublicStats } from "@/lib/stats";
+import { toYouTubeEmbedUrl } from "@/lib/youtube";
 
 export default async function HomePage() {
   const [settings, stats] = await Promise.all([
@@ -91,7 +92,7 @@ export default async function HomePage() {
             {settings.videoUrl && (
               <div className="mt-6 aspect-video overflow-hidden rounded-xl">
                 <iframe
-                  src={settings.videoUrl}
+                  src={toYouTubeEmbedUrl(settings.videoUrl)}
                   className="h-full w-full"
                   allowFullScreen
                 />
