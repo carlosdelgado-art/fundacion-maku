@@ -47,13 +47,6 @@ export function Navbar({
             Equipo
           </Link>
         </nav>
-
-        <Link
-          href="/donar"
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-        >
-          Donar Ahora
-        </Link>
       </div>
     </header>
   );
