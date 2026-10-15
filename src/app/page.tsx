@@ -1,6 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Navbar } from "@/components/Navbar";
 import { ProgressBar } from "@/components/ProgressBar";
+import { UsersIcon, StarIcon, MapPinIcon } from "@/components/icons";
 import { getSettings } from "@/lib/settings";
 import { getPublicStats } from "@/lib/stats";
 import { toYouTubeEmbedUrl } from "@/lib/youtube";
@@ -24,7 +26,7 @@ export default async function HomePage() {
       <main className="flex-1">
         <section className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-2 md:items-center">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-1.5 text-sm font-medium text-emerald-700">
+            <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-700">
               ❤ Meta: {new Intl.NumberFormat("es-CO").format(stats.goal_amount)}{" "}
               COP
             </span>
@@ -32,7 +34,7 @@ export default async function HomePage() {
             <h1 className="mt-6 text-4xl font-bold leading-tight text-neutral-900 md:text-5xl">
               {settings.heroTitle.split(settings.heroSubtitle)[0]}
               {settings.heroSubtitle && (
-                <span className="text-emerald-600">
+                <span className="text-blue-600">
                   {settings.heroSubtitle}
                 </span>
               )}
@@ -46,7 +48,7 @@ export default async function HomePage() {
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 href="/donar"
-                className="rounded-md bg-emerald-600 px-6 py-3 font-semibold text-white hover:bg-emerald-700"
+                className="rounded-md bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700"
               >
                 ❤ Donar Ahora
               </Link>
@@ -59,13 +61,28 @@ export default async function HomePage() {
             </div>
 
             <div className="mt-10 grid grid-cols-3 gap-6 border-t border-neutral-200 pt-8">
-              <Stat value={settings.statChildren} label="Niños" />
-              <Stat value={settings.statLeaders} label="Líderes" />
-              <Stat value={settings.statNewHq} label="Sede Nueva" />
+              <Stat icon={<UsersIcon className="h-5 w-5" />} value={settings.statChildren} />
+              <Stat icon={<StarIcon className="h-5 w-5" />} value={settings.statLeaders} />
+              <Stat icon={<MapPinIcon className="h-5 w-5" />} value={settings.statNewHq} />
             </div>
           </div>
 
-          <div className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-sm">
+          <div className="relative">
+            {/* Panel decorativo detrás, estilo "envolviendo" el video */}
+            <div className="absolute -bottom-3 -right-3 h-full w-full rounded-3xl bg-blue-100" />
+
+            {/* Mascota del equipo, asomando al lado izquierdo del video */}
+            <div className="absolute -left-12 top-1/2 hidden w-28 -translate-y-1/2 overflow-hidden rounded-2xl shadow-xl ring-4 ring-white sm:block md:-left-16 md:w-36">
+              <Image
+                src="/maku-mascota.png"
+                alt={`Mascota de ${settings.teamName}`}
+                width={198}
+                height={422}
+                className="h-auto w-full object-cover"
+              />
+            </div>
+
+            <div className="relative z-10 rounded-3xl border border-blue-100 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-neutral-900">
               Avance de la campaña
             </h2>
@@ -99,6 +116,7 @@ export default async function HomePage() {
                 />
               </div>
             )}
+            </div>
           </div>
         </section>
 
@@ -109,7 +127,7 @@ export default async function HomePage() {
             </h2>
             <div className="mt-8 grid gap-6 md:grid-cols-2">
               <div className="rounded-2xl border border-neutral-200 p-6 text-left">
-                <h3 className="font-semibold text-emerald-700">
+                <h3 className="font-semibold text-blue-700">
                   1. Haz una donación
                 </h3>
                 <p className="mt-2 text-sm text-neutral-600">
@@ -119,13 +137,13 @@ export default async function HomePage() {
                 </p>
                 <Link
                   href="/donar"
-                  className="mt-4 inline-block text-sm font-semibold text-emerald-700 hover:underline"
+                  className="mt-4 inline-block text-sm font-semibold text-blue-700 hover:underline"
                 >
                   Ir al formulario de donación →
                 </Link>
               </div>
               <div className="rounded-2xl border border-neutral-200 p-6 text-left">
-                <h3 className="font-semibold text-emerald-700">
+                <h3 className="font-semibold text-blue-700">
                   2. Compra un cartón de bingo
                 </h3>
                 <p className="mt-2 text-sm text-neutral-600">
@@ -145,11 +163,15 @@ export default async function HomePage() {
   );
 }
 
-function Stat({ value, label }: { value: string; label: string }) {
+function Stat({ icon, value }: { icon: React.ReactNode; value: string }) {
   return (
     <div className="text-center">
-      <p className="text-2xl font-bold text-neutral-900">{value}</p>
-      <p className="text-sm text-neutral-500">{label}</p>
+      <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+        {icon}
+      </div>
+      <p className="text-sm font-semibold leading-snug text-neutral-900 sm:text-base">
+        {value}
+      </p>
     </div>
   );
 }

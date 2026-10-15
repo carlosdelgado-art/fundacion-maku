@@ -31,7 +31,7 @@ function LoginForm() {
   return (
     <main className="flex flex-1 items-center justify-center px-6 py-16">
       <div className="w-full max-w-sm rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
-        <Link href="/" className="text-sm text-emerald-700 hover:underline">
+        <Link href="/" className="text-sm text-blue-700 hover:underline">
           ← Volver al inicio
         </Link>
         <h1 className="mt-4 text-2xl font-bold text-neutral-900">
@@ -68,7 +68,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={pending}
-            className="w-full rounded-md bg-emerald-600 px-6 py-3 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+            className="w-full rounded-md bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
           >
             {pending ? "Ingresando..." : "Ingresar"}
           </button>

@@ -35,7 +35,7 @@ export default async function PanelLayout({
             <p className="text-xs text-neutral-500">Panel de integrante</p>
           </div>
           <div className="flex items-center gap-4 text-sm">
-            <Link href="/" className="text-neutral-600 hover:text-emerald-700">
+            <Link href="/" className="text-neutral-600 hover:text-blue-700">
               Ver sitio
             </Link>
             <form action={logout}>

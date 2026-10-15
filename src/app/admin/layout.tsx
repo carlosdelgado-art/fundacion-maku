@@ -45,7 +45,7 @@ export default async function AdminLayout({
             </p>
           </div>
           <div className="flex items-center gap-4 text-sm">
-            <Link href="/" className="text-neutral-600 hover:text-emerald-700">
+            <Link href="/" className="text-neutral-600 hover:text-blue-700">
               Ver sitio
             </Link>
             <form action={logout}>
@@ -60,7 +60,7 @@ export default async function AdminLayout({
             <Link
               key={link.href}
               href={link.href}
-              className="whitespace-nowrap border-b-2 border-transparent py-3 hover:border-emerald-600 hover:text-emerald-700"
+              className="whitespace-nowrap border-b-2 border-transparent py-3 hover:border-blue-600 hover:text-blue-700"
             >
               {link.label}
             </Link>

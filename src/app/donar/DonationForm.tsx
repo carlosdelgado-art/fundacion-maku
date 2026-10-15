@@ -61,7 +61,7 @@ export function DonationForm() {
 
   if (status === "done") {
     return (
-      <div className="rounded-lg bg-emerald-50 p-4 text-emerald-800">
+      <div className="rounded-lg bg-blue-50 p-4 text-blue-800">
         ¡Gracias por tu donación! Quedó registrada y está pendiente de
         verificación. Una vez aprobada se sumará a la meta.
       </div>
@@ -110,7 +110,7 @@ export function DonationForm() {
           type="file"
           accept="image/*,.pdf"
           required
-          className="input file:mr-4 file:rounded-md file:border-0 file:bg-emerald-600 file:px-4 file:py-2 file:text-white"
+          className="input file:mr-4 file:rounded-md file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-white"
         />
       </Field>
 
@@ -119,7 +119,7 @@ export function DonationForm() {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="w-full rounded-md bg-emerald-600 px-6 py-3 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+        className="w-full rounded-md bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
       >
         {status === "loading" ? "Enviando..." : "Enviar donación"}
       </button>

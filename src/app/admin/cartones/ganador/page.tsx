@@ -16,7 +16,7 @@ type SaleWithSeller = {
 const STATUS_BANNER: Record<string, { text: string; style: string }> = {
   approved: {
     text: "✅ Venta aprobada — este cartón es válido para jugar",
-    style: "bg-emerald-50 border-emerald-300 text-emerald-800",
+    style: "bg-blue-50 border-blue-300 text-blue-800",
   },
   pending: {
     text: "⏳ Esta venta todavía está pendiente de aprobación",
@@ -89,7 +89,7 @@ export default async function GanadorPage({
         </label>
         <button
           type="submit"
-          className="rounded-md bg-emerald-600 px-5 py-2 font-semibold text-white hover:bg-emerald-700"
+          className="rounded-md bg-blue-600 px-5 py-2 font-semibold text-white hover:bg-blue-700"
         >
           Buscar
         </button>
@@ -172,7 +172,7 @@ export default async function GanadorPage({
                     <td className="px-4 py-3 text-right">
                       <Link
                         href={`/admin/cartones/ganador?numero=${s.card_number}`}
-                        className="text-emerald-700 hover:underline"
+                        className="text-blue-700 hover:underline"
                       >
                         Ver cartón →
                       </Link>

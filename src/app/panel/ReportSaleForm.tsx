@@ -109,13 +109,13 @@ export function ReportSaleForm({ cardNumbers }: { cardNumbers: number[] }) {
           type="file"
           accept="image/*,.pdf"
           required
-          className="input file:mr-4 file:rounded-md file:border-0 file:bg-emerald-600 file:px-4 file:py-2 file:text-white"
+          className="input file:mr-4 file:rounded-md file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-white"
         />
       </label>
 
       {errorMsg && <p className="text-sm text-red-600">{errorMsg}</p>}
       {status === "done" && (
-        <p className="text-sm text-emerald-700">
+        <p className="text-sm text-blue-700">
           Venta reportada, queda pendiente de aprobación del administrador.
         </p>
       )}
@@ -123,7 +123,7 @@ export function ReportSaleForm({ cardNumbers }: { cardNumbers: number[] }) {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="rounded-md bg-emerald-600 px-6 py-2.5 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+        className="rounded-md bg-blue-600 px-6 py-2.5 font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
       >
         {status === "loading" ? "Enviando..." : "Reportar venta"}
       </button>

@@ -13,7 +13,7 @@ const STATUS_LABEL: Record<string, string> = {
 const STATUS_STYLE: Record<string, string> = {
   assigned: "bg-blue-50 text-blue-700",
   pending_sale: "bg-amber-50 text-amber-700",
-  sold: "bg-emerald-50 text-emerald-700",
+  sold: "bg-blue-50 text-blue-700",
 };
 
 export default async function PanelPage() {
@@ -52,7 +52,7 @@ export default async function PanelPage() {
           <Link
             href="/panel/imprimir"
             target="_blank"
-            className="rounded-md border border-emerald-600 px-4 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-50"
+            className="rounded-md border border-blue-600 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50"
           >
             Imprimir mis cartones
           </Link>

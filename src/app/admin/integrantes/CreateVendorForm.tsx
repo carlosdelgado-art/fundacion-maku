@@ -71,7 +71,7 @@ export function CreateVendorForm() {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="sm:col-span-2 rounded-md bg-emerald-600 px-5 py-2 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+        className="sm:col-span-2 rounded-md bg-blue-600 px-5 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
       >
         {status === "loading" ? "Creando..." : "Crear integrante"}
       </button>

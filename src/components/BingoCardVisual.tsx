@@ -18,8 +18,8 @@ export function BingoCardVisual({
   const columns = generateBingoCard(cardNumber);
 
   return (
-    <div className="mx-auto w-full max-w-sm overflow-hidden rounded-2xl border-2 border-emerald-700 bg-white print:break-inside-avoid print:shadow-none">
-      <div className="flex items-center justify-between bg-emerald-700 px-4 py-3 text-white">
+    <div className="mx-auto w-full max-w-sm overflow-hidden rounded-2xl border-2 border-blue-700 bg-white print:break-inside-avoid print:shadow-none">
+      <div className="flex items-center justify-between bg-blue-700 px-4 py-3 text-white">
         <div className="flex items-center gap-2">
           {logoUrl ? (
             <Image
@@ -37,7 +37,7 @@ export function BingoCardVisual({
         </span>
       </div>
 
-      <div className="grid grid-cols-5 bg-emerald-700 text-center text-xl font-extrabold text-white">
+      <div className="grid grid-cols-5 bg-blue-700 text-center text-xl font-extrabold text-white">
         {LETTERS.map((l) => (
           <div key={l} className="py-2">
             {l}
@@ -54,7 +54,7 @@ export function BingoCardVisual({
               <div
                 key={`${letter}-${row}`}
                 className={`flex aspect-square items-center justify-center border border-neutral-200 text-lg font-bold ${
-                  isFree ? "bg-emerald-50 text-emerald-700" : "text-neutral-900"
+                  isFree ? "bg-blue-50 text-blue-700" : "text-neutral-900"
                 }`}
               >
                 {isFree ? "★" : value}

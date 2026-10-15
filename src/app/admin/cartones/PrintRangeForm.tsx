@@ -46,7 +46,7 @@ export function PrintRangeForm() {
       </label>
       <button
         type="submit"
-        className="rounded-md bg-emerald-600 px-5 py-2 font-semibold text-white hover:bg-emerald-700"
+        className="rounded-md bg-blue-600 px-5 py-2 font-semibold text-white hover:bg-blue-700"
       >
         Ver e imprimir este rango
       </button>

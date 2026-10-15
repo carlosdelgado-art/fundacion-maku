@@ -22,8 +22,8 @@ export default async function DonarPage() {
           {formatCOP(settings.goalAmount)}.
         </p>
 
-        <div className="mt-6 rounded-2xl border border-emerald-100 bg-emerald-50 p-6">
-          <h2 className="font-semibold text-emerald-800">
+        <div className="mt-6 rounded-2xl border border-blue-100 bg-blue-50 p-6">
+          <h2 className="font-semibold text-blue-800">
             Datos para transferir
           </h2>
           {settings.brebKey ? (

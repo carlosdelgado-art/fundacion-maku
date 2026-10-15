@@ -79,7 +79,7 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
             name="logo"
             type="file"
             accept="image/*"
-            className="input file:mr-4 file:rounded-md file:border-0 file:bg-emerald-600 file:px-4 file:py-2 file:text-white"
+            className="input file:mr-4 file:rounded-md file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-white"
           />
           {settings.logoUrl && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -115,13 +115,13 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
           <input name="video_url" defaultValue={settings.videoUrl} className="input" />
         </Field>
         <div className="grid grid-cols-3 gap-3">
-          <Field label="Niños">
+          <Field label="Texto estadística 1 (con ícono de personas)">
             <input name="stat_children" defaultValue={settings.statChildren} className="input" />
           </Field>
-          <Field label="Líderes">
+          <Field label="Texto estadística 2 (con ícono de estrella)">
             <input name="stat_leaders" defaultValue={settings.statLeaders} className="input" />
           </Field>
-          <Field label="Sede nueva">
+          <Field label="Texto estadística 3 (con ícono de ubicación)">
             <input name="stat_new_hq" defaultValue={settings.statNewHq} className="input" />
           </Field>
         </div>
@@ -165,13 +165,13 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
         <p className="text-sm text-red-600">{message}</p>
       )}
       {status === "done" && (
-        <p className="text-sm text-emerald-700">Configuración guardada.</p>
+        <p className="text-sm text-blue-700">Configuración guardada.</p>
       )}
 
       <button
         type="submit"
         disabled={status === "loading"}
-        className="rounded-md bg-emerald-600 px-6 py-3 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+        className="rounded-md bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
       >
         {status === "loading" ? "Guardando..." : "Guardar configuración"}
       </button>

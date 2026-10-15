@@ -45,7 +45,7 @@ export default async function DonacionesPage({
             href={`/admin/donaciones?status=${tab.value}`}
             className={`-mb-px border-b-2 px-4 py-2 text-sm font-medium ${
               current === tab.value
-                ? "border-emerald-600 text-emerald-700"
+                ? "border-blue-600 text-blue-700"
                 : "border-transparent text-neutral-500 hover:text-neutral-800"
             }`}
           >
@@ -87,7 +87,7 @@ export default async function DonacionesPage({
                       href={d.signedUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="mt-2 inline-block text-sm font-medium text-emerald-700 hover:underline"
+                      className="mt-2 inline-block text-sm font-medium text-blue-700 hover:underline"
                     >
                       Ver comprobante →
                     </a>
@@ -98,7 +98,7 @@ export default async function DonacionesPage({
                   <div className="flex gap-2">
                     <form action={approveDonation}>
                       <input type="hidden" name="id" value={d.id} />
-                      <button className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">
+                      <button className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">
                         Aprobar
                       </button>
                     </form>

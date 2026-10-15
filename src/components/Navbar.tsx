@@ -23,7 +23,7 @@ export function Navbar({
               className="h-10 w-10 rounded-full object-cover"
             />
           ) : (
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-sm font-bold text-white">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
               {teamName.slice(0, 1)}
             </div>
           )}
@@ -34,20 +34,20 @@ export function Navbar({
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm font-medium text-neutral-700 md:flex">
-          <Link href="/" className="hover:text-emerald-700">
+          <Link href="/" className="hover:text-blue-700">
             Inicio
           </Link>
-          <Link href="/donar" className="hover:text-emerald-700">
+          <Link href="/donar" className="hover:text-blue-700">
             Donar
           </Link>
-          <Link href="/login" className="hover:text-emerald-700">
+          <Link href="/login" className="hover:text-blue-700">
             Equipo
           </Link>
         </nav>
 
         <Link
           href="/donar"
-          className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
+          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
         >
           Donar Ahora
         </Link>

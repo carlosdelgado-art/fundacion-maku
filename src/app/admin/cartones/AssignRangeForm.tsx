@@ -56,14 +56,14 @@ export function AssignRangeForm({
       <button
         type="submit"
         disabled={pending}
-        className="rounded-md bg-emerald-600 px-5 py-2 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+        className="rounded-md bg-blue-600 px-5 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
       >
         {pending ? "Asignando..." : "Asignar rango"}
       </button>
 
       {state?.error && <p className="w-full text-sm text-red-600">{state.error}</p>}
       {state?.success && (
-        <p className="w-full text-sm text-emerald-700">
+        <p className="w-full text-sm text-blue-700">
           Se asignaron {state.assignedCount} cartones (los que ya estaban
           asignados no se modificaron).
         </p>

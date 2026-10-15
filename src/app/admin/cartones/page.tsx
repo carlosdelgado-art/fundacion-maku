@@ -8,7 +8,7 @@ const STATUS_STYLE: Record<string, string> = {
   unassigned: "bg-neutral-100 text-neutral-500",
   assigned: "bg-blue-50 text-blue-700",
   pending_sale: "bg-amber-50 text-amber-700",
-  sold: "bg-emerald-50 text-emerald-700",
+  sold: "bg-blue-50 text-blue-700",
 };
 
 export default async function CartonesPage() {
@@ -98,7 +98,7 @@ export default async function CartonesPage() {
                       href={s.signedUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="mt-2 inline-block text-sm font-medium text-emerald-700 hover:underline"
+                      className="mt-2 inline-block text-sm font-medium text-blue-700 hover:underline"
                     >
                       Ver comprobante →
                     </a>
@@ -107,7 +107,7 @@ export default async function CartonesPage() {
                 <div className="flex gap-2">
                   <form action={approveSale}>
                     <input type="hidden" name="id" value={s.id} />
-                    <button className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">
+                    <button className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">
                       Aprobar
                     </button>
                   </form>
@@ -153,7 +153,7 @@ export default async function CartonesPage() {
           <Legend color="bg-neutral-100" label="Sin asignar" />
           <Legend color="bg-blue-50" label="Asignado" />
           <Legend color="bg-amber-50" label="Por aprobar" />
-          <Legend color="bg-emerald-50" label="Vendido" />
+          <Legend color="bg-blue-50" label="Vendido" />
         </div>
       </section>
     </div>

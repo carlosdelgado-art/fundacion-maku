@@ -73,7 +73,7 @@ export default async function IntegrantesPage() {
                     <td className="px-4 py-3">{v.assignedCount}</td>
                     <td className="px-4 py-3">{v.pendingCount}</td>
                     <td className="px-4 py-3">{v.soldCount}</td>
-                    <td className="px-4 py-3 font-medium text-emerald-700">
+                    <td className="px-4 py-3 font-medium text-blue-700">
                       {formatCOP(v.soldCount * settings.cardPrice)}
                     </td>
                   </tr>
