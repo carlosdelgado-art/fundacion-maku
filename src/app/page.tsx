@@ -12,8 +12,6 @@ export default async function HomePage() {
     getPublicStats(),
   ]);
 
-  const cardsRemaining = Math.max(0, stats.cards_total - stats.cards_sold);
-
   return (
     <>
       <Navbar
@@ -23,7 +21,7 @@ export default async function HomePage() {
       />
 
       <main className="flex-1">
-        <section className="mx-auto grid max-w-[1800px] gap-10 px-6 py-16 md:grid-cols-2 md:items-center lg:gap-20 lg:px-16">
+        <section className="mx-auto grid max-w-[1800px] gap-10 px-6 py-16 md:grid-cols-[3fr_7fr] md:items-center lg:gap-20 lg:px-16">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-700">
               ❤ Meta: {new Intl.NumberFormat("es-CO").format(stats.goal_amount)}{" "}
@@ -83,10 +81,10 @@ export default async function HomePage() {
             <div
               className="absolute z-10 flex flex-col justify-center gap-2 overflow-hidden"
               style={{
-                left: "22.6%",
-                right: "23.8%",
-                top: "36.5%",
-                bottom: "10.2%",
+                left: "25.5%",
+                right: "25.5%",
+                top: "37%",
+                bottom: "13%",
               }}
             >
               <div>
@@ -98,10 +96,6 @@ export default async function HomePage() {
                   goal={stats.goal_amount}
                   compact
                 />
-                <p className="mt-1 text-[10px] text-neutral-500 sm:text-xs">
-                  {stats.cards_sold}/{stats.cards_total} cartones vendidos ·{" "}
-                  {cardsRemaining} disponibles
-                </p>
               </div>
 
               {settings.videoUrl && (
