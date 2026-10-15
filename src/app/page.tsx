@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { ProgressBar } from "@/components/ProgressBar";
 import { DonorsCarousel } from "@/components/DonorsCarousel";
-import { UsersIcon, StarIcon, MapPinIcon } from "@/components/icons";
 import { getSettings } from "@/lib/settings";
 import { getPublicStats } from "@/lib/stats";
 import { getPublicDonations } from "@/lib/donations";
@@ -58,12 +57,6 @@ export default async function HomePage() {
               >
                 🎟️ Bingo Solidario
               </Link>
-            </div>
-
-            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-neutral-200 pt-8">
-              <Stat icon={<UsersIcon className="h-5 w-5" />} value={settings.statChildren} />
-              <Stat icon={<StarIcon className="h-5 w-5" />} value={settings.statLeaders} />
-              <Stat icon={<MapPinIcon className="h-5 w-5" />} value={settings.statNewHq} />
             </div>
           </div>
 
@@ -188,18 +181,5 @@ export default async function HomePage() {
         {settings.teamName} · {settings.foundationName}
       </footer>
     </>
-  );
-}
-
-function Stat({ icon, value }: { icon: React.ReactNode; value: string }) {
-  return (
-    <div className="text-center">
-      <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-600">
-        {icon}
-      </div>
-      <p className="text-sm font-semibold leading-snug text-neutral-900 sm:text-base">
-        {value}
-      </p>
-    </div>
   );
 }

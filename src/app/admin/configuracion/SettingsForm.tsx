@@ -136,17 +136,6 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
         <Field label="URL del video (cualquier link de YouTube, opcional)">
           <input name="video_url" defaultValue={settings.videoUrl} className="input" />
         </Field>
-        <div className="grid grid-cols-3 gap-3">
-          <Field label="Texto estadística 1 (con ícono de personas)">
-            <input name="stat_children" defaultValue={settings.statChildren} className="input" />
-          </Field>
-          <Field label="Texto estadística 2 (con ícono de estrella)">
-            <input name="stat_leaders" defaultValue={settings.statLeaders} className="input" />
-          </Field>
-          <Field label="Texto estadística 3 (con ícono de ubicación)">
-            <input name="stat_new_hq" defaultValue={settings.statNewHq} className="input" />
-          </Field>
-        </div>
       </Section>
 
       <Section title="Legado (sección antes de &quot;¿Cómo puedo ayudar?&quot;)">

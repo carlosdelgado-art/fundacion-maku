@@ -22,9 +22,6 @@ export async function getSettings() {
     heroDescription:
       map.get(SETTINGS_KEYS.heroDescription) ||
       "Ayudanos a alcanzar nuestra meta para apoyar a quienes mas lo necesitan.",
-    statChildren: map.get(SETTINGS_KEYS.statChildren) || "Más de 70 niños",
-    statLeaders: map.get(SETTINGS_KEYS.statLeaders) || "12 Líderes",
-    statNewHq: map.get(SETTINGS_KEYS.statNewHq) || "Sede Madrid - Cundinamarca",
     videoUrl: map.get(SETTINGS_KEYS.videoUrl) || "",
     goalAmount: Number(map.get(SETTINGS_KEYS.goalAmount) || 12000000),
     brebKey: map.get(SETTINGS_KEYS.brebKey) || "",
