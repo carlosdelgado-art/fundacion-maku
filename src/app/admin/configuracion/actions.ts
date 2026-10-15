@@ -24,6 +24,7 @@ export async function updateSettings(formData: FormData) {
   ];
 
   const logoFile = formData.get("logo") as File | null;
+  let logoWarning: string | undefined;
   if (logoFile && logoFile.size > 0) {
     const ext = logoFile.name.split(".").pop() || "png";
     const path = `logo-${Date.now()}.${ext}`;
@@ -31,7 +32,9 @@ export async function updateSettings(formData: FormData) {
       .from("logos")
       .upload(path, logoFile, { upsert: true });
 
-    if (!uploadError) {
+    if (uploadError) {
+      logoWarning = `No se pudo subir el logo: ${uploadError.message}`;
+    } else {
       const { data } = supabase.storage.from("logos").getPublicUrl(path);
       entries.push([SETTINGS_KEYS.logoUrl, data.publicUrl]);
     }
@@ -42,10 +45,10 @@ export async function updateSettings(formData: FormData) {
     .upsert(entries.map(([key, value]) => ({ key, value })));
 
   if (error) {
-    return { error: "No se pudo guardar la configuración." };
+    return { error: `No se pudo guardar la configuración: ${error.message}` };
   }
 
   revalidatePath("/", "layout");
   revalidatePath("/admin/configuracion");
-  return { success: true };
+  return { success: true, warning: logoWarning };
 }

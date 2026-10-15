@@ -9,12 +9,22 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
     "idle"
   );
 
+  const [message, setMessage] = useState("");
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("loading");
     const formData = new FormData(e.currentTarget);
     const result = await updateSettings(formData);
-    setStatus(result?.error ? "error" : "done");
+
+    if (result?.error) {
+      setMessage(result.error);
+      setStatus("error");
+      return;
+    }
+
+    setMessage(result?.warning || "");
+    setStatus("done");
   }
 
   return (
@@ -115,10 +125,12 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
       </Section>
 
       {status === "error" && (
-        <p className="text-sm text-red-600">No se pudo guardar. Intenta de nuevo.</p>
+        <p className="text-sm text-red-600">{message}</p>
       )}
       {status === "done" && (
-        <p className="text-sm text-emerald-700">Configuración guardada.</p>
+        <p className={`text-sm ${message ? "text-amber-600" : "text-emerald-700"}`}>
+          {message || "Configuración guardada."}
+        </p>
       )}
 
       <button
