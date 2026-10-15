@@ -1,15 +1,18 @@
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { ProgressBar } from "@/components/ProgressBar";
+import { DonorsCarousel } from "@/components/DonorsCarousel";
 import { UsersIcon, StarIcon, MapPinIcon } from "@/components/icons";
 import { getSettings } from "@/lib/settings";
 import { getPublicStats } from "@/lib/stats";
+import { getPublicDonations } from "@/lib/donations";
 import { toYouTubeEmbedUrl } from "@/lib/youtube";
 
 export default async function HomePage() {
-  const [settings, stats] = await Promise.all([
+  const [settings, stats, donations] = await Promise.all([
     getSettings(),
     getPublicStats(),
+    getPublicDonations(),
   ]);
 
   return (
@@ -50,10 +53,10 @@ export default async function HomePage() {
                 ❤ Donar Ahora
               </Link>
               <Link
-                href="#bingo"
+                href="/bingo-solidario"
                 className="rounded-md border border-neutral-300 px-6 py-3 font-semibold text-neutral-800 hover:bg-neutral-100"
               >
-                Conocer Más
+                🎟️ Bingo Solidario
               </Link>
             </div>
 
@@ -146,6 +149,22 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+
+        {donations.length > 0 && (
+          <section className="border-t border-neutral-200 bg-neutral-50 py-16">
+            <div className="mx-auto max-w-4xl px-6 text-center">
+              <h2 className="text-2xl font-bold text-neutral-900">
+                Mensajes de quienes ya donaron
+              </h2>
+              <p className="mt-2 text-neutral-600">
+                Gracias por confiar en {settings.teamName} ❤
+              </p>
+              <div className="mt-8">
+                <DonorsCarousel donations={donations} />
+              </div>
+            </div>
+          </section>
+        )}
       </main>
 
       <footer className="border-t border-neutral-200 py-8 text-center text-sm text-neutral-500">

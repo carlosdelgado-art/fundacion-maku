@@ -40,6 +40,9 @@ export function Navbar({
           <Link href="/donar" className="hover:text-blue-700">
             Donar
           </Link>
+          <Link href="/bingo-solidario" className="hover:text-blue-700">
+            Bingo Solidario
+          </Link>
           <Link href="/login" className="hover:text-blue-700">
             Equipo
           </Link>

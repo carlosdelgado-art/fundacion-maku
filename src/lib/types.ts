@@ -66,6 +66,14 @@ export type PublicStats = {
   donations_count: number;
 };
 
+export type PublicDonation = {
+  id: string;
+  donor_name: string;
+  amount: number;
+  message: string | null;
+  created_at: string;
+};
+
 // Mapa de claves usadas en la tabla "settings" (configurables desde el panel admin)
 export const SETTINGS_KEYS = {
   foundationName: "foundation_name",
@@ -82,6 +90,10 @@ export const SETTINGS_KEYS = {
   brebKey: "breb_key",
   bankInfo: "bank_info",
   cardPrice: "card_price",
+  bingoDate: "bingo_date",
+  bingoModalidad: "bingo_modalidad",
+  bingoReglas: "bingo_reglas",
+  bingoPremios: "bingo_premios",
 } as const;
 
 // Tipado del esquema para que el cliente de Supabase infiera correctamente los
@@ -144,6 +156,10 @@ export type Database = {
       get_public_stats: {
         Args: Record<string, never>;
         Returns: PublicStats[];
+      };
+      get_public_donations: {
+        Args: { donations_limit?: number };
+        Returns: PublicDonation[];
       };
       is_admin: {
         Args: Record<string, never>;

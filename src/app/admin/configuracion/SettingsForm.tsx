@@ -161,6 +161,41 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
         </Field>
       </Section>
 
+      <Section title="Bingo Solidario">
+        <Field label="Fecha y hora del sorteo">
+          <input
+            name="bingo_date"
+            type="datetime-local"
+            defaultValue={settings.bingoDate}
+            className="input"
+          />
+        </Field>
+        <Field label="Modalidad (texto introductorio de la página /bingo-solidario)">
+          <textarea
+            name="bingo_modalidad"
+            defaultValue={settings.bingoModalidad}
+            rows={3}
+            className="input"
+          />
+        </Field>
+        <Field label="Reglas (una por línea)">
+          <textarea
+            name="bingo_reglas"
+            defaultValue={settings.bingoReglas}
+            rows={6}
+            className="input"
+          />
+        </Field>
+        <Field label="Premios (uno por línea)">
+          <textarea
+            name="bingo_premios"
+            defaultValue={settings.bingoPremios}
+            rows={4}
+            className="input"
+          />
+        </Field>
+      </Section>
+
       {status === "error" && (
         <p className="text-sm text-red-600">{message}</p>
       )}

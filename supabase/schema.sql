@@ -270,6 +270,32 @@ grant execute on function public.get_public_stats() to anon, authenticated;
 grant execute on function public.is_admin() to anon, authenticated;
 
 -- -----------------------------------------------------------------------------
+-- 6.1 Funcion publica de donaciones con mensaje (para el carrusel de donantes
+--     en la pagina principal), sin exponer telefono ni comprobante.
+-- -----------------------------------------------------------------------------
+create or replace function public.get_public_donations(donations_limit int default 20)
+returns table (
+  id uuid,
+  donor_name text,
+  amount numeric,
+  message text,
+  created_at timestamptz
+)
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select d.id, d.donor_name, d.amount, d.message, d.created_at
+  from public.donations d
+  where d.status = 'approved' and d.message is not null and d.message <> ''
+  order by d.created_at desc
+  limit donations_limit;
+$$;
+
+grant execute on function public.get_public_donations(int) to anon, authenticated;
+
+-- -----------------------------------------------------------------------------
 -- 7. STORAGE: buckets para comprobantes (privado) y logo (publico)
 -- -----------------------------------------------------------------------------
 insert into storage.buckets (id, name, public)

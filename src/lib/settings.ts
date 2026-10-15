@@ -30,6 +30,28 @@ export async function getSettings() {
     brebKey: map.get(SETTINGS_KEYS.brebKey) || "",
     bankInfo: map.get(SETTINGS_KEYS.bankInfo) || "",
     cardPrice: Number(map.get(SETTINGS_KEYS.cardPrice) || 30000),
+    bingoDate: map.get(SETTINGS_KEYS.bingoDate) || "2026-11-01T19:00",
+    bingoModalidad:
+      map.get(SETTINGS_KEYS.bingoModalidad) ||
+      "El Bingo Solidario es nuestra forma de recaudar fondos en comunidad: cada cartón que compras ayuda directamente a la fundación y te da la oportunidad de ganar increíbles premios. Compra tu cartón con cualquier integrante del equipo, repórtalo y espera el día del sorteo en vivo.",
+    bingoReglas:
+      map.get(SETTINGS_KEYS.bingoReglas) ||
+      [
+        "Cada cartón tiene 15 números distribuidos en una cuadrícula de bingo tradicional.",
+        "Solo participan los cartones cuya compra haya sido reportada y aprobada por el equipo organizador.",
+        "El sorteo se realiza en vivo, cantando las balotas una por una.",
+        "Gana quien complete primero el patrón anunciado antes de iniciar cada ronda.",
+        "Al cantar “¡Bingo!”, un integrante del equipo verificará tu cartón contra las balotas cantadas antes de entregar el premio.",
+        "La organización se reserva el derecho de anular cartones no reportados o con inconsistencias.",
+      ].join("\n"),
+    bingoPremios:
+      map.get(SETTINGS_KEYS.bingoPremios) ||
+      [
+        "🥇 Primer puesto: premio sorpresa principal",
+        "🥈 Segundo puesto: premio sorpresa",
+        "🥉 Tercer puesto: premio sorpresa",
+        "🎁 Premios adicionales durante la jornada para animar el evento",
+      ].join("\n"),
   };
 }
 

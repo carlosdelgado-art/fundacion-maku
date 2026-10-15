@@ -21,6 +21,10 @@ export async function updateSettings(formData: FormData) {
     [SETTINGS_KEYS.brebKey, String(formData.get("breb_key") || "")],
     [SETTINGS_KEYS.bankInfo, String(formData.get("bank_info") || "")],
     [SETTINGS_KEYS.cardPrice, String(Number(formData.get("card_price")) || 0)],
+    [SETTINGS_KEYS.bingoDate, String(formData.get("bingo_date") || "")],
+    [SETTINGS_KEYS.bingoModalidad, String(formData.get("bingo_modalidad") || "")],
+    [SETTINGS_KEYS.bingoReglas, String(formData.get("bingo_reglas") || "")],
+    [SETTINGS_KEYS.bingoPremios, String(formData.get("bingo_premios") || "")],
   ];
 
   // El logo ya se sube directamente desde el navegador (ver SettingsForm.tsx)
