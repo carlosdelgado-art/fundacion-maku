@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getSettings } from "@/lib/settings";
 import { formatCOP } from "@/lib/format";
@@ -37,14 +38,25 @@ export default async function PanelPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-neutral-900">
-          Mis cartones de bingo
-        </h1>
-        <p className="mt-1 text-neutral-600">
-          Cada cartón se vende a {formatCOP(settings.cardPrice)}. Tienes{" "}
-          {myCards.length} cartones asignados.
-        </p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-neutral-900">
+            Mis cartones de bingo
+          </h1>
+          <p className="mt-1 text-neutral-600">
+            Cada cartón se vende a {formatCOP(settings.cardPrice)}. Tienes{" "}
+            {myCards.length} cartones asignados.
+          </p>
+        </div>
+        {myCards.length > 0 && (
+          <Link
+            href="/panel/imprimir"
+            target="_blank"
+            className="rounded-md border border-emerald-600 px-4 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-50"
+          >
+            Imprimir mis cartones
+          </Link>
+        )}
       </div>
 
       <div className="grid grid-cols-3 gap-4 text-center">
@@ -79,13 +91,15 @@ export default async function PanelPage() {
             </h2>
             <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8">
               {myCards.map((c) => (
-                <div
+                <Link
                   key={c.number}
+                  href={`/cartones/${c.number}`}
+                  target="_blank"
                   title={STATUS_LABEL[c.status]}
-                  className={`rounded-md py-2 text-center text-sm font-semibold ${STATUS_STYLE[c.status]}`}
+                  className={`rounded-md py-2 text-center text-sm font-semibold hover:opacity-75 ${STATUS_STYLE[c.status]}`}
                 >
                   #{c.number}
-                </div>
+                </Link>
               ))}
             </div>
           </section>

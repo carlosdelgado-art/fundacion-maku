@@ -26,7 +26,7 @@ export default async function PanelLayout({
 
   return (
     <>
-      <header className="border-b border-neutral-200 bg-white">
+      <header className="border-b border-neutral-200 bg-white print:hidden">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
           <div>
             <p className="font-semibold text-neutral-900">
@@ -46,7 +46,7 @@ export default async function PanelLayout({
           </div>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10">
+      <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10 print:max-w-none print:p-0">
         {children}
       </main>
     </>

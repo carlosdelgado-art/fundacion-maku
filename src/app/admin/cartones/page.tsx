@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { AssignRangeForm } from "./AssignRangeForm";
+import { PrintRangeForm } from "./PrintRangeForm";
 import { approveSale, rejectSale } from "./actions";
 
 const STATUS_STYLE: Record<string, string> = {
@@ -55,6 +57,17 @@ export default async function CartonesPage() {
           Asignar rango de cartones
         </h2>
         <AssignRangeForm vendors={vendors ?? []} />
+      </section>
+
+      <section>
+        <h2 className="mb-3 font-semibold text-neutral-900">
+          Imprimir cartones
+        </h2>
+        <p className="mb-3 text-sm text-neutral-600">
+          Genera e imprime (o guarda como PDF) el diseño de un rango de
+          cartones para repartirlos a los integrantes.
+        </p>
+        <PrintRangeForm />
       </section>
 
       <section>
@@ -122,16 +135,18 @@ export default async function CartonesPage() {
         </h2>
         <div className="grid grid-cols-6 gap-2 sm:grid-cols-10 md:grid-cols-12">
           {(cards ?? []).map((c) => (
-            <div
+            <Link
               key={c.number}
+              href={`/cartones/${c.number}`}
+              target="_blank"
               title={
                 (c.profiles as unknown as { full_name: string } | null)
                   ?.full_name ?? "Sin asignar"
               }
-              className={`rounded-md py-2 text-center text-xs font-semibold ${STATUS_STYLE[c.status]}`}
+              className={`rounded-md py-2 text-center text-xs font-semibold hover:opacity-75 ${STATUS_STYLE[c.status]}`}
             >
               #{c.number}
-            </div>
+            </Link>
           ))}
         </div>
         <div className="mt-3 flex flex-wrap gap-4 text-xs text-neutral-500">

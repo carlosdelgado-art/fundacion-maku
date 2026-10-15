@@ -33,7 +33,7 @@ export default async function AdminLayout({
 
   return (
     <div className="flex min-h-screen flex-1 flex-col">
-      <header className="border-b border-neutral-200 bg-white">
+      <header className="border-b border-neutral-200 bg-white print:hidden">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div>
             <p className="font-semibold text-neutral-900">
@@ -66,7 +66,7 @@ export default async function AdminLayout({
           ))}
         </nav>
       </header>
-      <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-8">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-8 print:max-w-none print:p-0">
         {children}
       </main>
     </div>
