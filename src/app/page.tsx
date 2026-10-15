@@ -23,7 +23,7 @@ export default async function HomePage() {
       />
 
       <main className="flex-1">
-        <section className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-2 md:items-center">
+        <section className="mx-auto grid max-w-[1800px] gap-10 px-6 py-16 md:grid-cols-2 md:items-center lg:gap-20 lg:px-16">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-700">
               ❤ Meta: {new Intl.NumberFormat("es-CO").format(stats.goal_amount)}{" "}
