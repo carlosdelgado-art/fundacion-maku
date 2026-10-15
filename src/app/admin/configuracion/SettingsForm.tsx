@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import type { SiteSettings } from "@/lib/settings";
+import { createClient } from "@/lib/supabase/client";
 import { updateSettings } from "./actions";
 
 export function SettingsForm({ settings }: { settings: SiteSettings }) {
@@ -14,17 +15,50 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("loading");
-    const formData = new FormData(e.currentTarget);
-    const result = await updateSettings(formData);
+    setMessage("");
 
-    if (result?.error) {
-      setMessage(result.error);
+    try {
+      const formData = new FormData(e.currentTarget);
+
+      // El logo se sube directo desde el navegador al storage de Supabase
+      // (evita el limite de tamaño de los Server Actions). Si no se eligio
+      // un archivo nuevo, simplemente no se envia "logo_url" y se conserva
+      // el logo que ya habia.
+      const logoFile = formData.get("logo") as File | null;
+      formData.delete("logo");
+
+      if (logoFile && logoFile.size > 0) {
+        const supabase = createClient();
+        const ext = logoFile.name.split(".").pop() || "png";
+        const path = `logo-${Date.now()}.${ext}`;
+        const { error: uploadError } = await supabase.storage
+          .from("logos")
+          .upload(path, logoFile, { upsert: true });
+
+        if (uploadError) {
+          setMessage(`No se pudo subir el logo: ${uploadError.message}`);
+          setStatus("error");
+          return;
+        }
+
+        const { data } = supabase.storage.from("logos").getPublicUrl(path);
+        formData.set("logo_url", data.publicUrl);
+      }
+
+      const result = await updateSettings(formData);
+
+      if (result?.error) {
+        setMessage(result.error);
+        setStatus("error");
+        return;
+      }
+
+      setStatus("done");
+    } catch (err) {
+      console.error(err);
+      setMessage("Ocurrió un error inesperado. Intenta de nuevo.");
       setStatus("error");
-      return;
     }
-
-    setMessage(result?.warning || "");
-    setStatus("done");
   }
 
   return (
@@ -48,9 +82,12 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
             className="input file:mr-4 file:rounded-md file:border-0 file:bg-emerald-600 file:px-4 file:py-2 file:text-white"
           />
           {settings.logoUrl && (
-            <p className="mt-1 text-xs text-neutral-500">
-              Logo actual: {settings.logoUrl}
-            </p>
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={settings.logoUrl}
+              alt="Logo actual"
+              className="mt-2 h-16 w-16 rounded-full border border-neutral-200 object-cover"
+            />
           )}
         </Field>
       </Section>
@@ -128,9 +165,7 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
         <p className="text-sm text-red-600">{message}</p>
       )}
       {status === "done" && (
-        <p className={`text-sm ${message ? "text-amber-600" : "text-emerald-700"}`}>
-          {message || "Configuración guardada."}
-        </p>
+        <p className="text-sm text-emerald-700">Configuración guardada.</p>
       )}
 
       <button

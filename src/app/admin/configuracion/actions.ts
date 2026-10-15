@@ -23,21 +23,12 @@ export async function updateSettings(formData: FormData) {
     [SETTINGS_KEYS.cardPrice, String(Number(formData.get("card_price")) || 0)],
   ];
 
-  const logoFile = formData.get("logo") as File | null;
-  let logoWarning: string | undefined;
-  if (logoFile && logoFile.size > 0) {
-    const ext = logoFile.name.split(".").pop() || "png";
-    const path = `logo-${Date.now()}.${ext}`;
-    const { error: uploadError } = await supabase.storage
-      .from("logos")
-      .upload(path, logoFile, { upsert: true });
-
-    if (uploadError) {
-      logoWarning = `No se pudo subir el logo: ${uploadError.message}`;
-    } else {
-      const { data } = supabase.storage.from("logos").getPublicUrl(path);
-      entries.push([SETTINGS_KEYS.logoUrl, data.publicUrl]);
-    }
+  // El logo ya se sube directamente desde el navegador (ver SettingsForm.tsx)
+  // para evitar el limite de 1MB que tienen los Server Actions por defecto.
+  // Aqui solo recibimos la URL publica resultante, si se subio uno nuevo.
+  const logoUrl = String(formData.get("logo_url") || "").trim();
+  if (logoUrl) {
+    entries.push([SETTINGS_KEYS.logoUrl, logoUrl]);
   }
 
   const { error } = await supabase
@@ -50,5 +41,5 @@ export async function updateSettings(formData: FormData) {
 
   revalidatePath("/", "layout");
   revalidatePath("/admin/configuracion");
-  return { success: true, warning: logoWarning };
+  return { success: true };
 }
