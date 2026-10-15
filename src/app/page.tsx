@@ -59,60 +59,58 @@ export default async function HomePage() {
                 🎟️ Bingo Solidario
               </Link>
             </div>
-          </div>
 
-          <div className="mx-auto w-full max-w-md md:w-[520px] lg:w-[650px]">
-            <div
-              id="bingo"
-              className="relative w-full"
-              style={{ aspectRatio: "1051 / 768" }}
-            >
-              {/* Marco decorativo: el pulpo abraza la tarjeta de avance */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/maku-marco.png"
-                alt=""
-                className="pointer-events-none absolute inset-0 z-0 h-full w-full select-none"
-              />
-
-              {/* Contenido encajado dentro del espacio en blanco del marco */}
-              <div
-                className="absolute z-10 flex flex-col justify-center gap-2 overflow-hidden"
-                style={{
-                  left: "27%",
-                  right: "27%",
-                  top: "40%",
-                  bottom: "11%",
-                }}
-              >
-                <div>
-                  <h2 className="text-xs font-semibold text-neutral-900 sm:text-sm">
-                    Avance de la campaña
-                  </h2>
-                  <ProgressBar
-                    current={stats.total_raised}
-                    goal={stats.goal_amount}
-                    compact
-                  />
-                </div>
-
-                {settings.videoUrl && (
-                  <div className="aspect-video w-full overflow-hidden rounded-md">
-                    <iframe
-                      src={toYouTubeEmbedUrl(settings.videoUrl, { autoplay: true })}
-                      className="h-full w-full"
-                      allow="autoplay; encrypted-media"
-                      allowFullScreen
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="mt-8 grid grid-cols-3 gap-6 border-t border-neutral-200 pt-8">
+            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-neutral-200 pt-8">
               <Stat icon={<UsersIcon className="h-5 w-5" />} value={settings.statChildren} />
               <Stat icon={<StarIcon className="h-5 w-5" />} value={settings.statLeaders} />
               <Stat icon={<MapPinIcon className="h-5 w-5" />} value={settings.statNewHq} />
+            </div>
+          </div>
+
+          <div
+            id="bingo"
+            className="relative mx-auto w-full max-w-md md:w-[520px] md:max-w-[520px] lg:w-[650px] lg:max-w-[650px]"
+            style={{ aspectRatio: "1051 / 768" }}
+          >
+            {/* Marco decorativo: el pulpo abraza la tarjeta de avance */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/maku-marco.png"
+              alt=""
+              className="pointer-events-none absolute inset-0 z-0 h-full w-full select-none"
+            />
+
+            {/* Contenido encajado dentro del espacio en blanco del marco */}
+            <div
+              className="absolute z-10 flex flex-col justify-center gap-2 overflow-hidden"
+              style={{
+                left: "27%",
+                right: "27%",
+                top: "40%",
+                bottom: "11%",
+              }}
+            >
+              <div>
+                <h2 className="text-xs font-semibold text-neutral-900 sm:text-sm">
+                  Avance de la campaña
+                </h2>
+                <ProgressBar
+                  current={stats.total_raised}
+                  goal={stats.goal_amount}
+                  compact
+                />
+              </div>
+
+              {settings.videoUrl && (
+                <div className="aspect-video w-full overflow-hidden rounded-md">
+                  <iframe
+                    src={toYouTubeEmbedUrl(settings.videoUrl, { autoplay: true })}
+                    className="h-full w-full"
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                  />
+                </div>
+              )}
             </div>
           </div>
         </section>
