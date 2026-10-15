@@ -14,23 +14,16 @@ export async function reportSale(formData: FormData) {
   const cardNumber = Number(formData.get("card_number"));
   const buyerName = String(formData.get("buyer_name") || "").trim();
   const buyerPhone = String(formData.get("buyer_phone") || "").trim();
-  const file = formData.get("evidence") as File | null;
+  // La foto de evidencia ya se sube directo desde el navegador (ver
+  // ReportSaleForm.tsx) para evitar el limite de 1MB de los Server Actions.
+  // Aqui solo recibimos la ruta ya subida en el bucket "evidence".
+  const evidenceUrl = String(formData.get("evidence_url") || "").trim();
 
-  if (!cardNumber || !buyerName || !file || file.size === 0) {
+  if (!cardNumber || !buyerName || !evidenceUrl) {
     return {
       error:
         "Selecciona el cartón, escribe el nombre del comprador y sube la evidencia.",
     };
-  }
-
-  const ext = file.name.split(".").pop() || "jpg";
-  const path = `cartones/${user.id}/${crypto.randomUUID()}.${ext}`;
-
-  const { error: uploadError } = await supabase.storage
-    .from("evidence")
-    .upload(path, file);
-  if (uploadError) {
-    return { error: "No se pudo subir la evidencia. Intenta de nuevo." };
   }
 
   const { error: insertError } = await supabase.from("card_sales").insert({
@@ -38,7 +31,7 @@ export async function reportSale(formData: FormData) {
     seller_id: user.id,
     buyer_name: buyerName,
     buyer_phone: buyerPhone || null,
-    evidence_url: path,
+    evidence_url: evidenceUrl,
   });
 
   if (insertError) {

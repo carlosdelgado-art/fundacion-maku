@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
+import { createClient } from "@/lib/supabase/client";
 import { reportSale } from "./actions";
 
 export function ReportSaleForm({ cardNumbers }: { cardNumbers: number[] }) {
@@ -15,18 +16,52 @@ export function ReportSaleForm({ cardNumbers }: { cardNumbers: number[] }) {
     setStatus("loading");
     setErrorMsg("");
 
-    const formData = new FormData(e.currentTarget);
-    const result = await reportSale(formData);
+    try {
+      const formData = new FormData(e.currentTarget);
 
-    if (result?.error) {
-      setErrorMsg(result.error);
+      // Subimos la foto directo desde el navegador (evita el limite de 1MB
+      // que tienen los Server Actions) y solo enviamos la ruta resultante.
+      const file = formData.get("evidence") as File | null;
+      formData.delete("evidence");
+
+      if (!file || file.size === 0) {
+        setErrorMsg("Sube una foto de evidencia del pago.");
+        setStatus("error");
+        return;
+      }
+
+      const supabase = createClient();
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `cartones/${crypto.randomUUID()}.${ext}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("evidence")
+        .upload(path, file);
+
+      if (uploadError) {
+        setErrorMsg(`No se pudo subir la evidencia: ${uploadError.message}`);
+        setStatus("error");
+        return;
+      }
+
+      formData.set("evidence_url", path);
+
+      const result = await reportSale(formData);
+
+      if (result?.error) {
+        setErrorMsg(result.error);
+        setStatus("error");
+        return;
+      }
+
+      setStatus("done");
+      formRef.current?.reset();
+      setTimeout(() => setStatus("idle"), 3000);
+    } catch (err) {
+      console.error(err);
+      setErrorMsg("Ocurrió un error inesperado. Intenta de nuevo.");
       setStatus("error");
-      return;
     }
-
-    setStatus("done");
-    formRef.current?.reset();
-    setTimeout(() => setStatus("idle"), 3000);
   }
 
   return (
