@@ -169,7 +169,7 @@ export default async function HomePage() {
 
         {donations.length > 0 && (
           <section className="border-t border-neutral-200 bg-neutral-50 py-16">
-            <div className="mx-auto max-w-4xl px-6 text-center">
+            <div className="mx-auto max-w-6xl px-6 text-center">
               <h2 className="text-2xl font-bold text-neutral-900">
                 Corazones que ya se sumaron a este legado
               </h2>
