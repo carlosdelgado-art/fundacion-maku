@@ -116,6 +116,60 @@ export default async function HomePage() {
         </section>
 
         <section className="border-t border-neutral-200 bg-white py-16">
+          <div
+            className={`mx-auto max-w-6xl px-6 ${
+              settings.legadoImageUrl
+                ? "grid items-center gap-10 md:grid-cols-2 md:gap-14"
+                : "max-w-3xl"
+            }`}
+          >
+            <div>
+              <h2 className="text-2xl font-bold leading-snug text-neutral-900 md:text-3xl">
+                Un legado que comienza cuando abrimos oportunidades
+              </h2>
+              <div className="mt-5 space-y-4 text-neutral-600">
+                <p>
+                  La Fundación Jesús es Mi Alegría acompaña a personas con
+                  discapacidad y a personas en situación de vulnerabilidad,
+                  creando espacios de cuidado, aprendizaje y desarrollo donde
+                  cada persona pueda encontrar nuevas oportunidades.
+                </p>
+                <p>
+                  Con nuestro legado, queremos contribuir al bienestar de
+                  estas{" "}
+                  <strong className="font-semibold text-blue-600">
+                    dos poblaciones
+                  </strong>
+                  : por un lado, personas con discapacidad cognitiva que
+                  merecen espacios donde puedan desarrollar sus capacidades,
+                  fortalecer su autonomía y descubrir todo lo que son capaces
+                  de lograr; y por otro, personas en situación de extrema
+                  vulnerabilidad, para quienes el cuidado y el acompañamiento
+                  pueden marcar una diferencia en su día a día.
+                </p>
+                <p>
+                  Soñamos con que las personas con discapacidad no solo
+                  reciban apoyo, sino que también tengan la oportunidad de
+                  aportar, crecer y construir su propio camino, con
+                  posibilidades de inclusión y trabajo digno. Al mismo
+                  tiempo, queremos fortalecer la capacidad de la Fundación
+                  para seguir acompañando a quienes más lo necesitan.
+                </p>
+              </div>
+            </div>
+
+            {settings.legadoImageUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={settings.legadoImageUrl}
+                alt="Un legado que comienza cuando abrimos oportunidades"
+                className="aspect-[4/3] w-full rounded-2xl object-cover"
+              />
+            )}
+          </div>
+        </section>
+
+        <section className="border-t border-neutral-200 bg-white py-16">
           <div className="mx-auto max-w-4xl px-6 text-center">
             <h2 className="text-2xl font-bold text-neutral-900">
               ¿Cómo puedo ayudar?

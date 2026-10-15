@@ -35,6 +35,12 @@ export async function updateSettings(formData: FormData) {
     entries.push([SETTINGS_KEYS.logoUrl, logoUrl]);
   }
 
+  // Misma logica para la foto de la seccion "Legado".
+  const legadoImageUrl = String(formData.get("legado_image_url") || "").trim();
+  if (legadoImageUrl) {
+    entries.push([SETTINGS_KEYS.legadoImageUrl, legadoImageUrl]);
+  }
+
   const { error } = await supabase
     .from("settings")
     .upsert(entries.map(([key, value]) => ({ key, value })));

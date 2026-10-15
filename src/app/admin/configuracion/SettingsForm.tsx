@@ -45,6 +45,28 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
         formData.set("logo_url", data.publicUrl);
       }
 
+      // Misma logica para la foto de la seccion "Un legado que comienza...".
+      const legadoFile = formData.get("legado_image") as File | null;
+      formData.delete("legado_image");
+
+      if (legadoFile && legadoFile.size > 0) {
+        const supabase = createClient();
+        const ext = legadoFile.name.split(".").pop() || "jpg";
+        const path = `legado-${Date.now()}.${ext}`;
+        const { error: uploadError } = await supabase.storage
+          .from("logos")
+          .upload(path, legadoFile, { upsert: true });
+
+        if (uploadError) {
+          setMessage(`No se pudo subir la foto: ${uploadError.message}`);
+          setStatus("error");
+          return;
+        }
+
+        const { data } = supabase.storage.from("logos").getPublicUrl(path);
+        formData.set("legado_image_url", data.publicUrl);
+      }
+
       const result = await updateSettings(formData);
 
       if (result?.error) {
@@ -125,6 +147,30 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
             <input name="stat_new_hq" defaultValue={settings.statNewHq} className="input" />
           </Field>
         </div>
+      </Section>
+
+      <Section title="Legado (sección antes de &quot;¿Cómo puedo ayudar?&quot;)">
+        <Field label="Foto">
+          <input
+            name="legado_image"
+            type="file"
+            accept="image/*"
+            className="input file:mr-4 file:rounded-md file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-white"
+          />
+          {settings.legadoImageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={settings.legadoImageUrl}
+              alt="Foto actual de la sección Legado"
+              className="mt-2 h-32 w-48 rounded-lg border border-neutral-200 object-cover"
+            />
+          ) : (
+            <p className="mt-2 text-sm text-neutral-500">
+              Aún no has subido una foto. Mientras tanto, la sección se
+              muestra solo con el texto.
+            </p>
+          )}
+        </Field>
       </Section>
 
       <Section title="Donaciones">

@@ -52,6 +52,7 @@ export async function getSettings() {
         "🥉 Tercer puesto: premio sorpresa",
         "🎁 Premios adicionales durante la jornada para animar el evento",
       ].join("\n"),
+    legadoImageUrl: map.get(SETTINGS_KEYS.legadoImageUrl) || "",
   };
 }
 
