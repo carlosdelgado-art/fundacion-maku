@@ -8,7 +8,7 @@ const STATUS_STYLE: Record<string, string> = {
   unassigned: "bg-neutral-100 text-neutral-500",
   assigned: "bg-blue-50 text-blue-700",
   pending_sale: "bg-amber-50 text-amber-700",
-  sold: "bg-blue-50 text-blue-700",
+  sold: "bg-green-100 text-green-700",
 };
 
 export default async function CartonesPage() {
@@ -153,7 +153,7 @@ export default async function CartonesPage() {
           <Legend color="bg-neutral-100" label="Sin asignar" />
           <Legend color="bg-blue-50" label="Asignado" />
           <Legend color="bg-amber-50" label="Por aprobar" />
-          <Legend color="bg-blue-50" label="Vendido" />
+          <Legend color="bg-green-100" label="Vendido" />
         </div>
       </section>
     </div>
