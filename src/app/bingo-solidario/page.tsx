@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Countdown } from "@/components/Countdown";
+import { BuyCardForm } from "@/components/BuyCardForm";
 import {
   CalendarIcon,
   CheckCircleIcon,
@@ -9,6 +10,7 @@ import {
   UsersIcon,
 } from "@/components/icons";
 import { getSettings } from "@/lib/settings";
+import { getAvailableCardNumbers } from "@/lib/cards";
 import { formatCOP } from "@/lib/format";
 
 export const metadata = {
@@ -16,7 +18,10 @@ export const metadata = {
 };
 
 export default async function BingoSolidarioPage() {
-  const settings = await getSettings();
+  const [settings, availableNumbers] = await Promise.all([
+    getSettings(),
+    getAvailableCardNumbers(),
+  ]);
 
   const fechaLegible = new Date(settings.bingoDate).toLocaleString("es-CO", {
     weekday: "long",
@@ -69,10 +74,10 @@ export default async function BingoSolidarioPage() {
               ❤ Donar Ahora
             </Link>
             <a
-              href="#modalidad"
+              href="#comprar"
               className="rounded-md border border-white/40 px-6 py-3 font-semibold text-white hover:bg-white/10"
             >
-              ¿Cómo participar?
+              🎟️ Comprar mi cartón
             </a>
           </div>
         </section>
@@ -100,8 +105,49 @@ export default async function BingoSolidarioPage() {
               <InfoCard
                 icon={<UsersIcon className="h-5 w-5" />}
                 label="Cómo comprar"
-                value={`Contacta a cualquier integrante de ${settings.teamName}`}
+                value={`Cómpralo aquí mismo en línea, o contacta a cualquier integrante de ${settings.teamName}`}
               />
+            </div>
+          </div>
+        </section>
+
+        <section id="comprar" className="border-t border-neutral-200 bg-neutral-50 py-16">
+          <div className="mx-auto max-w-2xl px-6">
+            <h2 className="text-center text-2xl font-bold text-neutral-900">
+              Compra tu cartón aquí
+            </h2>
+            <p className="mt-2 text-center text-neutral-600">
+              Elige un número disponible, transfiere el pago y sube tu
+              comprobante. Quedará pendiente de verificación y, una vez
+              aprobado, el cartón será tuyo.
+            </p>
+
+            <div className="mt-6 rounded-2xl border border-blue-100 bg-blue-50 p-6">
+              <h3 className="font-semibold text-blue-800">
+                Datos para transferir
+              </h3>
+              {settings.brebKey ? (
+                <p className="mt-2 text-lg">
+                  Llave Bre-B:{" "}
+                  <span className="font-mono font-bold">
+                    {settings.brebKey}
+                  </span>
+                </p>
+              ) : (
+                <p className="mt-2 text-sm text-neutral-600">
+                  La llave Bre-B aún no ha sido configurada. Contacta al
+                  administrador.
+                </p>
+              )}
+              {settings.bankInfo && (
+                <p className="mt-2 whitespace-pre-line text-sm text-neutral-700">
+                  {settings.bankInfo}
+                </p>
+              )}
+            </div>
+
+            <div className="mt-6 rounded-2xl border border-neutral-200 bg-white p-6">
+              <BuyCardForm availableNumbers={availableNumbers} />
             </div>
           </div>
         </section>
@@ -152,10 +198,10 @@ export default async function BingoSolidarioPage() {
             comprar tu cartón y participa el día del sorteo.
           </p>
           <Link
-            href="/donar"
+            href="#comprar"
             className="mt-6 inline-block rounded-md bg-white px-6 py-3 font-semibold text-blue-700 hover:bg-blue-50"
           >
-            ❤ Donar Ahora
+            🎟️ Comprar mi cartón
           </Link>
         </section>
       </main>

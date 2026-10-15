@@ -161,6 +161,19 @@ export type Database = {
         Args: { donations_limit?: number };
         Returns: PublicDonation[];
       };
+      get_available_card_numbers: {
+        Args: Record<string, never>;
+        Returns: number[];
+      };
+      request_card_purchase: {
+        Args: {
+          p_card_number: number;
+          p_buyer_name: string;
+          p_buyer_phone: string | null;
+          p_evidence_url: string;
+        };
+        Returns: string;
+      };
       is_admin: {
         Args: Record<string, never>;
         Returns: boolean;

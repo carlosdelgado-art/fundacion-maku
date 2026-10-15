@@ -209,6 +209,72 @@ create trigger on_card_sale_update
   for each row execute function public.handle_card_sale_update();
 
 -- -----------------------------------------------------------------------------
+-- 4.1 Compra publica de cartones: el usuario final (sin iniciar sesion)
+--     elige un numero disponible, paga y sube su comprobante. La venta queda
+--     atribuida automaticamente al lider al que ese numero esta asignado
+--     (segun los rangos repartidos en /admin/cartones), sin que el comprador
+--     tenga que saber ni elegir quien es el vendedor.
+-- -----------------------------------------------------------------------------
+
+-- Numeros que un lider ya tiene asignados y todavia no se han vendido ni
+-- estan en revision: son los unicos que el publico puede comprar.
+create or replace function public.get_available_card_numbers()
+returns int[]
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select coalesce(array_agg(number order by number), '{}'::int[])
+  from public.bingo_cards
+  where status = 'assigned';
+$$;
+
+grant execute on function public.get_available_card_numbers() to anon, authenticated;
+
+-- Inserta el reporte de venta buscando el lider dueño del carton por su
+-- cuenta (asi el comprador nunca necesita saber ni enviar el seller_id).
+-- Bloquea la fila del carton mientras valida, para evitar que dos personas
+-- compren el mismo numero al mismo tiempo.
+create or replace function public.request_card_purchase(
+  p_card_number int,
+  p_buyer_name text,
+  p_buyer_phone text,
+  p_evidence_url text
+)
+returns uuid
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_seller uuid;
+  v_sale_id uuid;
+begin
+  select assigned_to into v_seller
+  from public.bingo_cards
+  where number = p_card_number and status = 'assigned'
+  for update;
+
+  if v_seller is null then
+    raise exception 'card_not_available';
+  end if;
+
+  if coalesce(trim(p_buyer_name), '') = '' or coalesce(trim(p_evidence_url), '') = '' then
+    raise exception 'missing_fields';
+  end if;
+
+  insert into public.card_sales (card_number, seller_id, buyer_name, buyer_phone, evidence_url)
+  values (p_card_number, v_seller, trim(p_buyer_name), nullif(trim(coalesce(p_buyer_phone, '')), ''), p_evidence_url)
+  returning id into v_sale_id;
+
+  return v_sale_id;
+end;
+$$;
+
+grant execute on function public.request_card_purchase(int, text, text, text) to anon, authenticated;
+
+-- -----------------------------------------------------------------------------
 -- 5. DONATIONS: donaciones en dinero con comprobante (Bre-B)
 -- -----------------------------------------------------------------------------
 create table if not exists public.donations (
