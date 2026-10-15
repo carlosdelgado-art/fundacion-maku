@@ -67,15 +67,9 @@ export default async function BingoSolidarioPage() {
           </div>
 
           <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <Link
-              href="/donar"
-              className="rounded-md bg-white px-6 py-3 font-semibold text-blue-700 hover:bg-blue-50"
-            >
-              ❤ Donar Ahora
-            </Link>
             <a
               href="#comprar"
-              className="rounded-md border border-white/40 px-6 py-3 font-semibold text-white hover:bg-white/10"
+              className="rounded-md bg-white px-6 py-3 font-semibold text-blue-700 hover:bg-blue-50"
             >
               🎟️ Comprar mi cartón
             </a>
