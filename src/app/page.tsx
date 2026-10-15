@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Navbar } from "@/components/Navbar";
 import { ProgressBar } from "@/components/ProgressBar";
 import { UsersIcon, StarIcon, MapPinIcon } from "@/components/icons";
@@ -67,18 +66,43 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="relative">
-            {/* Panel decorativo detrás, estilo "envolviendo" el video */}
-            <div className="absolute -bottom-3 -right-3 h-full w-full rounded-3xl bg-blue-100" />
-
-            {/* Mascota del equipo, asomando al lado izquierdo del video */}
-            <div className="absolute -left-12 top-1/2 hidden w-28 -translate-y-1/2 overflow-hidden rounded-2xl shadow-xl ring-4 ring-white sm:block md:-left-16 md:w-36">
-              <Image
+          <div className="relative py-6">
+            {/* Tentáculos del pulpo asomando desde las esquinas, con bordes
+                difuminados (mask radial) para que no se vea como un
+                recorte rectangular, sino como si envolviera la tarjeta. */}
+            <div
+              className="pointer-events-none absolute -left-10 -top-10 z-0 hidden h-40 w-40 sm:block md:-left-14 md:-top-14 md:h-52 md:w-52"
+              style={{
+                maskImage:
+                  "radial-gradient(circle at 65% 35%, black 35%, transparent 70%)",
+                WebkitMaskImage:
+                  "radial-gradient(circle at 65% 35%, black 35%, transparent 70%)",
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="/maku-mascota.png"
-                alt={`Mascota de ${settings.teamName}`}
-                width={198}
-                height={422}
-                className="h-auto w-full object-cover"
+                alt=""
+                className="h-full w-full object-cover"
+                style={{ objectPosition: "50% 10%" }}
+              />
+            </div>
+
+            <div
+              className="pointer-events-none absolute -bottom-10 -right-10 z-0 hidden h-44 w-44 sm:block md:-bottom-14 md:-right-14 md:h-56 md:w-56"
+              style={{
+                maskImage:
+                  "radial-gradient(circle at 35% 65%, black 35%, transparent 70%)",
+                WebkitMaskImage:
+                  "radial-gradient(circle at 35% 65%, black 35%, transparent 70%)",
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/maku-mascota.png"
+                alt=""
+                className="h-full w-full object-cover"
+                style={{ objectPosition: "50% 85%" }}
               />
             </div>
 
