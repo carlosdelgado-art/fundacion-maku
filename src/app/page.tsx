@@ -66,8 +66,8 @@ export default async function HomePage() {
 
           <div
             id="bingo"
-            className="relative mx-auto w-full max-w-md md:w-[520px] md:max-w-[520px]"
-            style={{ aspectRatio: "840 / 768" }}
+            className="relative mx-auto w-full max-w-md md:w-[520px] md:max-w-[520px] lg:w-[650px] lg:max-w-[650px]"
+            style={{ aspectRatio: "1051 / 768" }}
           >
             {/* Marco decorativo: el pulpo abraza la tarjeta de avance */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -81,10 +81,10 @@ export default async function HomePage() {
             <div
               className="absolute z-10 flex flex-col justify-center gap-2 overflow-hidden"
               style={{
-                left: "25.5%",
-                right: "25.5%",
-                top: "37%",
-                bottom: "13%",
+                left: "27%",
+                right: "27%",
+                top: "40%",
+                bottom: "11%",
               }}
             >
               <div>
