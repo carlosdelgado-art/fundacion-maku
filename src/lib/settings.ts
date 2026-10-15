@@ -50,6 +50,7 @@ export async function getSettings() {
         "🎁 Premios adicionales durante la jornada para animar el evento",
       ].join("\n"),
     legadoImageUrl: map.get(SETTINGS_KEYS.legadoImageUrl) || "",
+    webSalesVendorId: map.get(SETTINGS_KEYS.webSalesVendorId) || "",
   };
 }
 

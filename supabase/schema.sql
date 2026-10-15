@@ -213,8 +213,10 @@ create trigger on_card_sale_update
 --     tenga que saber ni elegir quien es el vendedor.
 -- -----------------------------------------------------------------------------
 
--- Numeros que un lider ya tiene asignados y todavia no se han vendido ni
--- estan en revision: son los unicos que el publico puede comprar.
+-- Numeros disponibles para compra publica: solo los que esten en el rango
+-- asignado al "canal de venta web" (un integrante designado en
+-- /admin/integrantes, guardado en settings.web_sales_vendor_id). Los rangos
+-- de los demas lideres (venta presencial) nunca se exponen aqui.
 create or replace function public.get_available_card_numbers()
 returns int[]
 language sql
@@ -222,17 +224,25 @@ security definer
 set search_path = public
 stable
 as $$
-  select coalesce(array_agg(number order by number), '{}'::int[])
-  from public.bingo_cards
-  where status = 'assigned';
+  with cfg as (
+    select nullif(value, '')::uuid as vendor_id
+    from public.settings
+    where key = 'web_sales_vendor_id'
+  )
+  select coalesce(array_agg(c.number order by c.number), '{}'::int[])
+  from public.bingo_cards c, cfg
+  where c.status = 'assigned' and c.assigned_to = cfg.vendor_id;
 $$;
 
 grant execute on function public.get_available_card_numbers() to anon, authenticated;
 
 -- Inserta el reporte de venta buscando el lider dueño del carton por su
 -- cuenta (asi el comprador nunca necesita saber ni enviar el seller_id).
--- Bloquea la fila del carton mientras valida, para evitar que dos personas
--- compren el mismo numero al mismo tiempo.
+-- Solo permite comprar cartones que pertenezcan al rango del canal de venta
+-- web (ver get_available_card_numbers), nunca a rangos de venta presencial,
+-- aunque alguien intente adivinar un numero que no aparece en la lista
+-- publica. Bloquea la fila del carton mientras valida, para evitar que dos
+-- personas compren el mismo numero al mismo tiempo.
 create or replace function public.request_card_purchase(
   p_card_number int,
   p_buyer_name text,
@@ -246,11 +256,18 @@ set search_path = public
 as $$
 declare
   v_seller uuid;
+  v_web_vendor uuid;
   v_sale_id uuid;
 begin
+  select nullif(value, '')::uuid into v_web_vendor
+  from public.settings
+  where key = 'web_sales_vendor_id';
+
   select assigned_to into v_seller
   from public.bingo_cards
-  where number = p_card_number and status = 'assigned'
+  where number = p_card_number
+    and status = 'assigned'
+    and assigned_to = v_web_vendor
   for update;
 
   if v_seller is null then

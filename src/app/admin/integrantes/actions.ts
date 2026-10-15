@@ -3,6 +3,43 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { SETTINGS_KEYS } from "@/lib/types";
+
+async function requireAdmin() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+  if (profile?.role !== "admin") return null;
+
+  return supabase;
+}
+
+export async function setWebSalesVendor(formData: FormData) {
+  const supabase = await requireAdmin();
+  if (!supabase) return { error: "No autorizado." };
+
+  const vendorId = String(formData.get("web_sales_vendor_id") || "").trim();
+
+  const { error } = await supabase
+    .from("settings")
+    .upsert({ key: SETTINGS_KEYS.webSalesVendorId, value: vendorId });
+
+  if (error) {
+    return { error: "No se pudo guardar el canal de venta web." };
+  }
+
+  revalidatePath("/admin/integrantes");
+  revalidatePath("/bingo-solidario");
+  return { success: true };
+}
 
 export async function createVendor(formData: FormData) {
   // Verificamos que quien llama esta accion sea realmente un administrador,

@@ -92,6 +92,7 @@ export const SETTINGS_KEYS = {
   bingoReglas: "bingo_reglas",
   bingoPremios: "bingo_premios",
   legadoImageUrl: "legado_image_url",
+  webSalesVendorId: "web_sales_vendor_id",
 } as const;
 
 // Tipado del esquema para que el cliente de Supabase infiera correctamente los

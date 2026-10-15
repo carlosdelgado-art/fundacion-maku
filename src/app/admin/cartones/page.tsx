@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { AssignRangeForm } from "./AssignRangeForm";
 import { PrintRangeForm } from "./PrintRangeForm";
 import { approveSale, rejectSale } from "./actions";
+import { getSettings } from "@/lib/settings";
 
 const STATUS_STYLE: Record<string, string> = {
   unassigned: "bg-neutral-100 text-neutral-500",
@@ -13,6 +14,7 @@ const STATUS_STYLE: Record<string, string> = {
 
 export default async function CartonesPage() {
   const supabase = await createClient();
+  const settings = await getSettings();
 
   const [{ data: vendors }, { data: cards }, { data: pendingSales }] =
     await Promise.all([
@@ -41,6 +43,11 @@ export default async function CartonesPage() {
     })
   );
 
+  const vendorsWithWebTag = (vendors ?? []).map((v) => ({
+    ...v,
+    isWebChannel: v.id === settings.webSalesVendorId,
+  }));
+
   return (
     <div className="space-y-10">
       <div>
@@ -48,7 +55,10 @@ export default async function CartonesPage() {
           Cartones de bingo (300)
         </h1>
         <p className="mt-1 text-neutral-600">
-          Asigna rangos de números a cada integrante del equipo.
+          Asigna rangos de números a cada integrante del equipo. El integrante
+          marcado como 🌐 es el canal de venta web (su rango es el único que
+          aparece como disponible en /bingo-solidario); configúralo desde
+          “Integrantes”.
         </p>
       </div>
 
@@ -56,7 +66,7 @@ export default async function CartonesPage() {
         <h2 className="mb-3 font-semibold text-neutral-900">
           Asignar rango de cartones
         </h2>
-        <AssignRangeForm vendors={vendors ?? []} />
+        <AssignRangeForm vendors={vendorsWithWebTag} />
       </section>
 
       <section>

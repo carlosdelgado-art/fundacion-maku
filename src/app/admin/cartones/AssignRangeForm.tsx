@@ -13,7 +13,7 @@ async function action(_prevState: State, formData: FormData) {
 export function AssignRangeForm({
   vendors,
 }: {
-  vendors: { id: string; full_name: string }[];
+  vendors: { id: string; full_name: string; isWebChannel?: boolean }[];
 }) {
   const [state, formAction, pending] = useActionState<State, FormData>(
     action,
@@ -33,7 +33,7 @@ export function AssignRangeForm({
           <option value="">Selecciona...</option>
           {vendors.map((v) => (
             <option key={v.id} value={v.id}>
-              {v.full_name}
+              {v.isWebChannel ? `🌐 ${v.full_name}` : v.full_name}
             </option>
           ))}
         </select>
@@ -61,11 +61,16 @@ export function AssignRangeForm({
         {pending ? "Asignando..." : "Asignar rango"}
       </button>
 
+      <label className="flex w-full items-center gap-2 text-sm text-neutral-700">
+        <input type="checkbox" name="reassign" value="true" className="h-4 w-4" />
+        Reasignar también los cartones que ya estén asignados a otro integrante
+        (no afecta a los que ya están vendidos o por aprobar)
+      </label>
+
       {state?.error && <p className="w-full text-sm text-red-600">{state.error}</p>}
       {state?.success && (
         <p className="w-full text-sm text-blue-700">
-          Se asignaron {state.assignedCount} cartones (los que ya estaban
-          asignados no se modificaron).
+          Se asignaron {state.assignedCount} cartones.
         </p>
       )}
     </form>
