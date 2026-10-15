@@ -66,80 +66,54 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="relative py-6">
-            {/* Tentáculos del pulpo asomando desde las esquinas, con bordes
-                difuminados (mask radial) para que no se vea como un
-                recorte rectangular, sino como si envolviera la tarjeta. */}
+          <div
+            id="bingo"
+            className="relative mx-auto w-full max-w-md"
+            style={{ aspectRatio: "840 / 768" }}
+          >
+            {/* Marco decorativo: el pulpo abraza la tarjeta de avance */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/maku-marco.png"
+              alt=""
+              className="pointer-events-none absolute inset-0 z-0 h-full w-full select-none"
+            />
+
+            {/* Contenido encajado dentro del espacio en blanco del marco */}
             <div
-              className="pointer-events-none absolute -left-10 -top-10 z-0 hidden h-40 w-40 sm:block md:-left-14 md:-top-14 md:h-52 md:w-52"
+              className="absolute z-10 flex flex-col justify-center gap-2 overflow-hidden"
               style={{
-                maskImage:
-                  "radial-gradient(circle at 65% 35%, black 35%, transparent 70%)",
-                WebkitMaskImage:
-                  "radial-gradient(circle at 65% 35%, black 35%, transparent 70%)",
+                left: "22.6%",
+                right: "23.8%",
+                top: "36.5%",
+                bottom: "10.2%",
               }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/maku-mascota.png"
-                alt=""
-                className="h-full w-full object-cover"
-                style={{ objectPosition: "50% 10%" }}
-              />
-            </div>
-
-            <div
-              className="pointer-events-none absolute -bottom-10 -right-10 z-0 hidden h-44 w-44 sm:block md:-bottom-14 md:-right-14 md:h-56 md:w-56"
-              style={{
-                maskImage:
-                  "radial-gradient(circle at 35% 65%, black 35%, transparent 70%)",
-                WebkitMaskImage:
-                  "radial-gradient(circle at 35% 65%, black 35%, transparent 70%)",
-              }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/maku-mascota.png"
-                alt=""
-                className="h-full w-full object-cover"
-                style={{ objectPosition: "50% 85%" }}
-              />
-            </div>
-
-            <div className="relative z-10 rounded-3xl border border-blue-100 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-neutral-900">
-              Avance de la campaña
-            </h2>
-            <p className="mb-4 text-sm text-neutral-500">
-              Donaciones + venta de cartones de bingo
-            </p>
-            <ProgressBar current={stats.total_raised} goal={stats.goal_amount} />
-
-            <div id="bingo" className="mt-8 grid grid-cols-2 gap-4">
-              <div className="rounded-xl bg-neutral-50 p-4 text-center">
-                <p className="text-2xl font-bold text-neutral-900">
-                  {stats.cards_sold}/{stats.cards_total}
-                </p>
-                <p className="text-sm text-neutral-500">Cartones vendidos</p>
-              </div>
-              <div className="rounded-xl bg-neutral-50 p-4 text-center">
-                <p className="text-2xl font-bold text-neutral-900">
-                  {cardsRemaining}
-                </p>
-                <p className="text-sm text-neutral-500">Cartones disponibles</p>
-              </div>
-            </div>
-
-            {settings.videoUrl && (
-              <div className="mt-6 aspect-video overflow-hidden rounded-xl">
-                <iframe
-                  src={toYouTubeEmbedUrl(settings.videoUrl, { autoplay: true })}
-                  className="h-full w-full"
-                  allow="autoplay; encrypted-media"
-                  allowFullScreen
+              <div>
+                <h2 className="text-xs font-semibold text-neutral-900 sm:text-sm">
+                  Avance de la campaña
+                </h2>
+                <ProgressBar
+                  current={stats.total_raised}
+                  goal={stats.goal_amount}
+                  compact
                 />
+                <p className="mt-1 text-[10px] text-neutral-500 sm:text-xs">
+                  {stats.cards_sold}/{stats.cards_total} cartones vendidos ·{" "}
+                  {cardsRemaining} disponibles
+                </p>
               </div>
-            )}
+
+              {settings.videoUrl && (
+                <div className="aspect-video w-full overflow-hidden rounded-md">
+                  <iframe
+                    src={toYouTubeEmbedUrl(settings.videoUrl, { autoplay: true })}
+                    className="h-full w-full"
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                  />
+                </div>
+              )}
             </div>
           </div>
         </section>
