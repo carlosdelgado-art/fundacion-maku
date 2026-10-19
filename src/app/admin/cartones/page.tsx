@@ -4,6 +4,7 @@ import { AssignRangeForm } from "./AssignRangeForm";
 import { PrintRangeForm } from "./PrintRangeForm";
 import { approveSale, rejectSale } from "./actions";
 import { getSettings } from "@/lib/settings";
+import { TOTAL_CARDS } from "@/lib/constants";
 import { formatCOP } from "@/lib/format";
 
 const STATUS_STYLE: Record<string, string> = {
@@ -82,7 +83,7 @@ export default async function CartonesPage() {
     <div className="space-y-10">
       <div>
         <h1 className="text-2xl font-bold text-neutral-900">
-          Cartones de bingo (300)
+          Cartones de bingo ({TOTAL_CARDS})
         </h1>
         <p className="mt-1 text-neutral-600">
           Asigna rangos de números a cada integrante del equipo. El integrante
@@ -177,7 +178,7 @@ export default async function CartonesPage() {
 
       <section>
         <h2 className="mb-3 font-semibold text-neutral-900">
-          Estado de los 300 cartones
+          Estado de los {TOTAL_CARDS} cartones
         </h2>
         <div className="grid grid-cols-6 gap-2 sm:grid-cols-10 md:grid-cols-12">
           {(cards ?? []).map((c) => (

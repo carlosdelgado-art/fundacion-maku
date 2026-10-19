@@ -2,7 +2,7 @@
 
 Aplicación web para la campaña de recaudación de **Equipo MAKU**: una página
 pública con la meta de donación, un formulario de donación con comprobante
-(Bre-B), y un sistema de venta de 300 cartones de bingo con panel para cada
+(Bre-B), y un sistema de venta de 400 cartones de bingo con panel para cada
 integrante del equipo y un panel de administración.
 
 ## Qué incluye
@@ -52,7 +52,7 @@ SUPABASE_SERVICE_ROLE_KEY=...
 
 Entra a tu proyecto de Supabase → **SQL Editor** → **New query**, pega todo el
 contenido de [`supabase/schema.sql`](./supabase/schema.sql) y dale **Run**.
-Esto crea las tablas, los 300 cartones, las políticas de seguridad (RLS) y los
+Esto crea las tablas, los 400 cartones, las políticas de seguridad (RLS) y los
 buckets de almacenamiento (`evidence` privado y `logos` público).
 
 ### 3. Crear el primer administrador

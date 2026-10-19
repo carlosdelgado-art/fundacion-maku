@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getSettings } from "@/lib/settings";
+import { TOTAL_CARDS } from "@/lib/constants";
 import { BingoCardVisual } from "@/components/BingoCardVisual";
 import { PrintButton } from "@/components/PrintButton";
 
@@ -11,7 +12,7 @@ export default async function CartonPage({
   const { numero } = await params;
   const cardNumber = Number(numero);
 
-  if (!Number.isInteger(cardNumber) || cardNumber < 1 || cardNumber > 300) {
+  if (!Number.isInteger(cardNumber) || cardNumber < 1 || cardNumber > TOTAL_CARDS) {
     notFound();
   }
 

@@ -1,6 +1,6 @@
 /**
  * Genera los numeros de un carton de bingo clasico (75 bolas: columnas B-I-N-G-O)
- * de forma DETERMINISTICA a partir del numero del carton (1-300). Esto significa
+ * de forma DETERMINISTICA a partir del numero del carton. Esto significa
  * que el carton #57 siempre mostrara los mismos numeros cada vez que se abra,
  * sin necesidad de guardar nada en la base de datos.
  */

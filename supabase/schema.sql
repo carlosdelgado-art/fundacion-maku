@@ -94,10 +94,10 @@ insert into public.settings (key, value) values
 on conflict (key) do nothing;
 
 -- -----------------------------------------------------------------------------
--- 3. BINGO_CARDS: los cartones numerados (1 a 350)
+-- 3. BINGO_CARDS: los cartones numerados (1 a 400)
 -- -----------------------------------------------------------------------------
 create table if not exists public.bingo_cards (
-  number integer primary key check (number between 1 and 350),
+  number integer primary key check (number between 1 and 400),
   assigned_to uuid references public.profiles (id) on delete set null,
   status text not null default 'unassigned'
     check (status in ('unassigned', 'assigned', 'pending_sale', 'sold')),
@@ -119,11 +119,11 @@ create policy "cards_vendedor_select_own"
 
 -- Ajusta el limite si la tabla ya existia con uno menor (ej. 300)
 alter table public.bingo_cards drop constraint if exists bingo_cards_number_check;
-alter table public.bingo_cards add constraint bingo_cards_number_check check (number between 1 and 350);
+alter table public.bingo_cards add constraint bingo_cards_number_check check (number between 1 and 400);
 
 -- Genera los cartones que falten (tambien sirve para agregar mas cartones)
 insert into public.bingo_cards (number)
-select generate_series(1, 350)
+select generate_series(1, 400)
 on conflict (number) do nothing;
 
 -- -----------------------------------------------------------------------------

@@ -1,11 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import type { PublicStats } from "@/lib/types";
+import { TOTAL_CARDS } from "@/lib/constants";
 
 const FALLBACK: PublicStats = {
   total_raised: 0,
   goal_amount: 12000000,
   cards_sold: 0,
-  cards_total: 300,
+  cards_total: TOTAL_CARDS,
   donations_count: 0,
 };
 

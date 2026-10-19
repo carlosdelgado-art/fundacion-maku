@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import { TOTAL_CARDS } from "@/lib/constants";
 
 export function PrintRangeForm() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export function PrintRangeForm() {
         <input
           type="number"
           min={1}
-          max={300}
+          max={TOTAL_CARDS}
           value={start}
           onChange={(e) => setStart(Number(e.target.value))}
           className="input w-24"
@@ -38,7 +39,7 @@ export function PrintRangeForm() {
         <input
           type="number"
           min={1}
-          max={300}
+          max={TOTAL_CARDS}
           value={end}
           onChange={(e) => setEnd(Number(e.target.value))}
           className="input w-24"

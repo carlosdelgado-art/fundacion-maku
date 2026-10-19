@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { BingoCardVisual } from "@/components/BingoCardVisual";
 import { getSettings } from "@/lib/settings";
+import { TOTAL_CARDS } from "@/lib/constants";
 
 type SaleWithSeller = {
   id: string;
@@ -35,7 +36,7 @@ export default async function GanadorPage({
 }) {
   const { numero } = await searchParams;
   const cardNumber = Number(numero);
-  const hasSearch = Number.isInteger(cardNumber) && cardNumber >= 1 && cardNumber <= 300;
+  const hasSearch = Number.isInteger(cardNumber) && cardNumber >= 1 && cardNumber <= TOTAL_CARDS;
 
   const supabase = await createClient();
   const settings = await getSettings();
@@ -81,7 +82,7 @@ export default async function GanadorPage({
             name="numero"
             type="number"
             min={1}
-            max={300}
+            max={TOTAL_CARDS}
             defaultValue={numero}
             required
             className="input w-32"

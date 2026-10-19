@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { assignRange } from "./actions";
+import { TOTAL_CARDS } from "@/lib/constants";
 
 type State = { error?: string; success?: boolean; assignedCount?: number } | null;
 
@@ -43,14 +44,14 @@ export function AssignRangeForm({
         <span className="mb-1 block text-sm font-medium text-neutral-700">
           Desde #
         </span>
-        <input name="start" type="number" min={1} max={300} required className="input w-24" />
+        <input name="start" type="number" min={1} max={TOTAL_CARDS} required className="input w-24" />
       </label>
 
       <label className="block">
         <span className="mb-1 block text-sm font-medium text-neutral-700">
           Hasta #
         </span>
-        <input name="end" type="number" min={1} max={300} required className="input w-24" />
+        <input name="end" type="number" min={1} max={TOTAL_CARDS} required className="input w-24" />
       </label>
 
       <button
