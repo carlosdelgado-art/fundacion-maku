@@ -94,10 +94,10 @@ insert into public.settings (key, value) values
 on conflict (key) do nothing;
 
 -- -----------------------------------------------------------------------------
--- 3. BINGO_CARDS: los 300 cartones numerados
+-- 3. BINGO_CARDS: los cartones numerados (1 a 350)
 -- -----------------------------------------------------------------------------
 create table if not exists public.bingo_cards (
-  number integer primary key check (number between 1 and 300),
+  number integer primary key check (number between 1 and 350),
   assigned_to uuid references public.profiles (id) on delete set null,
   status text not null default 'unassigned'
     check (status in ('unassigned', 'assigned', 'pending_sale', 'sold')),
@@ -117,10 +117,14 @@ create policy "cards_vendedor_select_own"
   on public.bingo_cards for select
   using (assigned_to = auth.uid());
 
--- Genera los 300 cartones si la tabla esta vacia
+-- Ajusta el limite si la tabla ya existia con uno menor (ej. 300)
+alter table public.bingo_cards drop constraint if exists bingo_cards_number_check;
+alter table public.bingo_cards add constraint bingo_cards_number_check check (number between 1 and 350);
+
+-- Genera los cartones que falten (tambien sirve para agregar mas cartones)
 insert into public.bingo_cards (number)
-select generate_series(1, 300)
-where not exists (select 1 from public.bingo_cards);
+select generate_series(1, 350)
+on conflict (number) do nothing;
 
 -- -----------------------------------------------------------------------------
 -- 4. CARD_SALES: reportes de venta de cartones (pendientes de aprobacion)
@@ -274,12 +278,12 @@ begin
     raise exception 'card_not_available';
   end if;
 
-  if coalesce(trim(p_buyer_name), '') = '' or coalesce(trim(p_evidence_url), '') = '' then
+  if coalesce(trim(p_buyer_name), '') = '' or coalesce(trim(p_buyer_phone), '') = '' or coalesce(trim(p_evidence_url), '') = '' then
     raise exception 'missing_fields';
   end if;
 
   insert into public.card_sales (card_number, seller_id, buyer_name, buyer_phone, evidence_url)
-  values (p_card_number, v_seller, trim(p_buyer_name), nullif(trim(coalesce(p_buyer_phone, '')), ''), p_evidence_url)
+  values (p_card_number, v_seller, trim(p_buyer_name), trim(p_buyer_phone), p_evidence_url)
   returning id into v_sale_id;
 
   return v_sale_id;

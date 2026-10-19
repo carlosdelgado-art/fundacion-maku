@@ -28,9 +28,9 @@ export function BuyCardForm({
     const buyerPhone = String(formData.get("buyer_phone") || "").trim();
     const file = formData.get("evidence") as File | null;
 
-    if (!cardNumber || !buyerName || !file || file.size === 0) {
+    if (!cardNumber || !buyerName || !buyerPhone || !file || file.size === 0) {
       setErrorMsg(
-        "Elige un cartón, escribe tu nombre y sube el comprobante de pago."
+        "Elige un cartón, escribe tu nombre y teléfono, y sube el comprobante de pago."
       );
       setStatus("error");
       return;
@@ -52,7 +52,7 @@ export function BuyCardForm({
         {
           p_card_number: cardNumber,
           p_buyer_name: buyerName,
-          p_buyer_phone: buyerPhone || null,
+          p_buyer_phone: buyerPhone,
           p_evidence_url: path,
         }
       );
@@ -127,9 +127,10 @@ export function BuyCardForm({
           </select>
         </Field>
 
-        <Field label="Teléfono (opcional)">
+        <Field label="Teléfono (para agregarte al grupo de WhatsApp)" required>
           <input
             name="buyer_phone"
+            required
             className="input"
             placeholder="300 123 4567"
           />
