@@ -4,6 +4,7 @@ import { AssignRangeForm } from "./AssignRangeForm";
 import { PrintRangeForm } from "./PrintRangeForm";
 import { approveSale, rejectSale } from "./actions";
 import { getSettings } from "@/lib/settings";
+import { formatCOP } from "@/lib/format";
 
 const STATUS_STYLE: Record<string, string> = {
   unassigned: "bg-neutral-100 text-neutral-500",
@@ -34,12 +35,41 @@ export default async function CartonesPage() {
         .order("created_at", { ascending: false }),
     ]);
 
+  const sales = pendingSales ?? [];
+
+  // Una compra puede tener varios cartones (mismo group_id). Se agrupan para
+  // aprobar o rechazar todo el pago de una vez.
+  const groups = new Map<
+    string,
+    { ids: string[]; cardNumbers: number[]; sample: (typeof sales)[number] }
+  >();
+  for (const s of sales) {
+    const key = s.group_id ?? s.id;
+    const group = groups.get(key);
+    if (group) {
+      group.ids.push(s.id);
+      group.cardNumbers.push(s.card_number);
+    } else {
+      groups.set(key, {
+        ids: [s.id],
+        cardNumbers: [s.card_number],
+        sample: s,
+      });
+    }
+  }
+
   const salesWithUrls = await Promise.all(
-    (pendingSales ?? []).map(async (s) => {
+    Array.from(groups.entries()).map(async ([key, g]) => {
       const { data } = await supabase.storage
         .from("evidence")
-        .createSignedUrl(s.evidence_url, 3600);
-      return { ...s, signedUrl: data?.signedUrl ?? null };
+        .createSignedUrl(g.sample.evidence_url, 3600);
+      return {
+        ...g.sample,
+        key,
+        ids: g.ids,
+        cardNumbers: [...g.cardNumbers].sort((a, b) => a - b),
+        signedUrl: data?.signedUrl ?? null,
+      };
     })
   );
 
@@ -90,18 +120,24 @@ export default async function CartonesPage() {
           <div className="space-y-4">
             {salesWithUrls.map((s) => (
               <div
-                key={s.id}
+                key={s.key}
                 className="flex flex-wrap items-start justify-between gap-4 rounded-xl border border-neutral-200 bg-white p-5"
               >
                 <div>
                   <p className="font-semibold text-neutral-900">
-                    Cartón #{s.card_number} · Comprador: {s.buyer_name}
+                    {s.cardNumbers.length > 1 ? "Cartones" : "Cartón"}{" "}
+                    {s.cardNumbers.map((n) => `#${n}`).join(", ")} · Comprador:{" "}
+                    {s.buyer_name}
                   </p>
                   <p className="text-sm text-neutral-500">
                     Vendido por:{" "}
                     {(s.profiles as unknown as { full_name: string } | null)
                       ?.full_name ?? "—"}{" "}
                     · {s.buyer_phone || "Sin teléfono"}
+                  </p>
+                  <p className="text-sm font-medium text-neutral-700">
+                    Total: {formatCOP(s.cardNumbers.length * settings.cardPrice)}{" "}
+                    ({s.cardNumbers.length} × {formatCOP(settings.cardPrice)})
                   </p>
                   {s.signedUrl && (
                     <a
@@ -116,13 +152,13 @@ export default async function CartonesPage() {
                 </div>
                 <div className="flex gap-2">
                   <form action={approveSale}>
-                    <input type="hidden" name="id" value={s.id} />
+                    <input type="hidden" name="ids" value={s.ids.join(",")} />
                     <button className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">
                       Aprobar
                     </button>
                   </form>
                   <form action={rejectSale} className="flex gap-2">
-                    <input type="hidden" name="id" value={s.id} />
+                    <input type="hidden" name="ids" value={s.ids.join(",")} />
                     <input
                       name="reject_reason"
                       placeholder="Motivo (opcional)"

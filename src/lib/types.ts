@@ -38,6 +38,7 @@ export type CardSale = {
   buyer_phone: string | null;
   evidence_url: string;
   status: ReviewStatus;
+  group_id: string | null;
   created_at: string;
   reviewed_by: string | null;
   reviewed_at: string | null;
@@ -130,6 +131,7 @@ export type Database = {
           buyer_phone?: string | null;
           evidence_url: string;
           status?: ReviewStatus;
+          group_id?: string | null;
           reviewed_by?: string | null;
           reviewed_at?: string | null;
           reject_reason?: string | null;
@@ -166,7 +168,7 @@ export type Database = {
       };
       request_card_purchase: {
         Args: {
-          p_card_number: number;
+          p_card_numbers: number[];
           p_buyer_name: string;
           p_buyer_phone: string | null;
           p_evidence_url: string;

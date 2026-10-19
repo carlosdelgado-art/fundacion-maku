@@ -111,9 +111,9 @@ export default async function BingoSolidarioPage() {
               Compra tu cartón aquí
             </h2>
             <p className="mt-2 text-center text-neutral-600">
-              Elige un número disponible, transfiere el pago y sube tu
+              Elige uno o más cartones disponibles, transfiere el pago y sube tu
               comprobante. Quedará pendiente de verificación y, una vez
-              aprobado, el cartón será tuyo.
+              aprobado, los cartones serán tuyos.
             </p>
 
             <div className="mt-6 rounded-2xl border border-blue-100 bg-blue-50 p-6">
@@ -141,7 +141,10 @@ export default async function BingoSolidarioPage() {
             </div>
 
             <div className="mt-6 rounded-2xl border border-neutral-200 bg-white p-6">
-              <BuyCardForm availableNumbers={availableNumbers} />
+              <BuyCardForm
+                availableNumbers={availableNumbers}
+                cardPrice={settings.cardPrice}
+              />
             </div>
           </div>
         </section>

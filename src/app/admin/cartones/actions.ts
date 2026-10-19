@@ -40,8 +40,14 @@ export async function assignRange(formData: FormData) {
   return { success: true, assignedCount: data?.length ?? 0 };
 }
 
+function saleIds(formData: FormData) {
+  return String(formData.get("ids") || "")
+    .split(",")
+    .filter(Boolean);
+}
+
 export async function approveSale(formData: FormData) {
-  const id = String(formData.get("id"));
+  const ids = saleIds(formData);
   const supabase = await createClient();
   const {
     data: { user },
@@ -54,7 +60,7 @@ export async function approveSale(formData: FormData) {
       reviewed_by: user?.id,
       reviewed_at: new Date().toISOString(),
     })
-    .eq("id", id);
+    .in("id", ids);
 
   revalidatePath("/admin/cartones");
   revalidatePath("/admin");
@@ -63,7 +69,7 @@ export async function approveSale(formData: FormData) {
 }
 
 export async function rejectSale(formData: FormData) {
-  const id = String(formData.get("id"));
+  const ids = saleIds(formData);
   const reason = String(formData.get("reject_reason") || "");
   const supabase = await createClient();
   const {
@@ -78,7 +84,7 @@ export async function rejectSale(formData: FormData) {
       reviewed_at: new Date().toISOString(),
       reject_reason: reason || null,
     })
-    .eq("id", id);
+    .in("id", ids);
 
   revalidatePath("/admin/cartones");
   revalidatePath("/admin");

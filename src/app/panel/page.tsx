@@ -77,7 +77,10 @@ export default async function PanelPage() {
               Reportar una venta
             </h2>
             {available.length > 0 ? (
-              <ReportSaleForm cardNumbers={available.map((c) => c.number)} />
+              <ReportSaleForm
+                cardNumbers={available.map((c) => c.number)}
+                cardPrice={settings.cardPrice}
+              />
             ) : (
               <p className="text-sm text-neutral-500">
                 No tienes cartones disponibles para vender en este momento.

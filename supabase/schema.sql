@@ -143,6 +143,9 @@ create table if not exists public.card_sales (
   reject_reason text
 );
 
+-- Cartones comprados en una misma compra (un pago) comparten group_id.
+alter table public.card_sales add column if not exists group_id uuid;
+
 alter table public.card_sales enable row level security;
 
 drop policy if exists "sales_admin_all" on public.card_sales;
@@ -240,15 +243,13 @@ $$;
 
 grant execute on function public.get_available_card_numbers() to anon, authenticated;
 
--- Inserta el reporte de venta buscando el lider dueño del carton por su
--- cuenta (asi el comprador nunca necesita saber ni enviar el seller_id).
--- Solo permite comprar cartones que pertenezcan al rango del canal de venta
--- web (ver get_available_card_numbers), nunca a rangos de venta presencial,
--- aunque alguien intente adivinar un numero que no aparece en la lista
--- publica. Bloquea la fila del carton mientras valida, para evitar que dos
--- personas compren el mismo numero al mismo tiempo.
+-- Compra de uno o varios cartones con un solo pago y un solo comprobante.
+-- Cada cartón queda como una fila de card_sales con el mismo group_id.
+-- Bloquea las filas de los cartones mientras valida, para evitar compras dobles.
+drop function if exists public.request_card_purchase(int, text, text, text);
+
 create or replace function public.request_card_purchase(
-  p_card_number int,
+  p_card_numbers int[],
   p_buyer_name text,
   p_buyer_phone text,
   p_evidence_url text
@@ -259,38 +260,51 @@ security definer
 set search_path = public
 as $$
 declare
-  v_seller uuid;
   v_web_vendor uuid;
-  v_sale_id uuid;
+  v_found integer;
+  v_requested integer;
+  v_group_id uuid := gen_random_uuid();
 begin
+  if coalesce(cardinality(p_card_numbers), 0) = 0
+    or coalesce(trim(p_buyer_name), '') = ''
+    or coalesce(trim(p_buyer_phone), '') = ''
+    or coalesce(trim(p_evidence_url), '') = '' then
+    raise exception 'missing_fields';
+  end if;
+
   select nullif(value, '')::uuid into v_web_vendor
   from public.settings
   where key = 'web_sales_vendor_id';
 
-  select assigned_to into v_seller
-  from public.bingo_cards
-  where number = p_card_number
-    and status = 'assigned'
-    and assigned_to = v_web_vendor
-  for update;
+  select count(*) into v_found
+  from (
+    select number
+    from public.bingo_cards
+    where number = any(p_card_numbers)
+      and status = 'assigned'
+      and assigned_to = v_web_vendor
+    order by number
+    for update
+  ) locked;
 
-  if v_seller is null then
+  select count(distinct n) into v_requested
+  from unnest(p_card_numbers) as n;
+
+  if v_found <> v_requested then
     raise exception 'card_not_available';
   end if;
 
-  if coalesce(trim(p_buyer_name), '') = '' or coalesce(trim(p_buyer_phone), '') = '' or coalesce(trim(p_evidence_url), '') = '' then
-    raise exception 'missing_fields';
-  end if;
+  insert into public.card_sales (card_number, seller_id, buyer_name, buyer_phone, evidence_url, group_id)
+  select c.number, c.assigned_to, trim(p_buyer_name), trim(p_buyer_phone), p_evidence_url, v_group_id
+  from public.bingo_cards c
+  where c.number = any(p_card_numbers)
+    and c.assigned_to = v_web_vendor;
 
-  insert into public.card_sales (card_number, seller_id, buyer_name, buyer_phone, evidence_url)
-  values (p_card_number, v_seller, trim(p_buyer_name), trim(p_buyer_phone), p_evidence_url)
-  returning id into v_sale_id;
-
-  return v_sale_id;
+  return v_group_id;
 end;
 $$;
 
-grant execute on function public.request_card_purchase(int, text, text, text) to anon, authenticated;
+grant execute on function public.request_card_purchase(int[], text, text, text) to anon, authenticated;
 
 -- -----------------------------------------------------------------------------
 -- 5. DONATIONS: donaciones en dinero con comprobante (Bre-B)

@@ -11,7 +11,14 @@ export async function reportSale(formData: FormData) {
 
   if (!user) return { error: "Debes iniciar sesión." };
 
-  const cardNumber = Number(formData.get("card_number"));
+  const cardNumbers = Array.from(
+    new Set(
+      String(formData.get("card_numbers") || "")
+        .split(",")
+        .map(Number)
+        .filter((n) => Number.isInteger(n) && n > 0)
+    )
+  );
   const buyerName = String(formData.get("buyer_name") || "").trim();
   const buyerPhone = String(formData.get("buyer_phone") || "").trim();
   // La foto de evidencia ya se sube directo desde el navegador (ver
@@ -19,25 +26,29 @@ export async function reportSale(formData: FormData) {
   // Aqui solo recibimos la ruta ya subida en el bucket "evidence".
   const evidenceUrl = String(formData.get("evidence_url") || "").trim();
 
-  if (!cardNumber || !buyerName || !evidenceUrl) {
+  if (cardNumbers.length === 0 || !buyerName || !evidenceUrl) {
     return {
       error:
-        "Selecciona el cartón, escribe el nombre del comprador y sube la evidencia.",
+        "Selecciona los cartones, escribe el nombre del comprador y sube la evidencia.",
     };
   }
 
-  const { error: insertError } = await supabase.from("card_sales").insert({
-    card_number: cardNumber,
-    seller_id: user.id,
-    buyer_name: buyerName,
-    buyer_phone: buyerPhone || null,
-    evidence_url: evidenceUrl,
-  });
+  const groupId = crypto.randomUUID();
+  const { error: insertError } = await supabase.from("card_sales").insert(
+    cardNumbers.map((cardNumber) => ({
+      card_number: cardNumber,
+      seller_id: user.id,
+      buyer_name: buyerName,
+      buyer_phone: buyerPhone || null,
+      evidence_url: evidenceUrl,
+      group_id: groupId,
+    }))
+  );
 
   if (insertError) {
     return {
       error:
-        "No se pudo registrar la venta. Verifica que el cartón esté disponible.",
+        "No se pudo registrar la venta. Verifica que los cartones estén disponibles.",
     };
   }
 

@@ -7,7 +7,7 @@ export default async function AdminDashboard() {
   const supabase = await createClient();
   const stats = await getPublicStats();
 
-  const [{ count: pendingDonations }, { count: pendingSales }, { count: totalProfiles }] =
+  const [{ count: pendingDonations }, { data: pendingSaleRows }, { count: totalProfiles }] =
     await Promise.all([
       supabase
         .from("donations")
@@ -15,13 +15,18 @@ export default async function AdminDashboard() {
         .eq("status", "pending"),
       supabase
         .from("card_sales")
-        .select("id", { count: "exact", head: true })
+        .select("id, group_id")
         .eq("status", "pending"),
       supabase
         .from("profiles")
         .select("id", { count: "exact", head: true })
         .eq("role", "vendedor"),
     ]);
+
+  // Una compra con varios cartones cuenta como una sola venta pendiente.
+  const pendingSales = new Set(
+    (pendingSaleRows ?? []).map((s) => s.group_id ?? s.id)
+  ).size;
 
   return (
     <div className="space-y-8">
