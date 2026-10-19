@@ -127,7 +127,7 @@ export function BuyCardForm({
           </select>
         </Field>
 
-        <Field label="Teléfono (para agregarte al grupo de WhatsApp)" required>
+        <Field label="Teléfono (Grupo de WhatsApp)" required>
           <input
             name="buyer_phone"
             required
