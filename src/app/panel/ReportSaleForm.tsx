@@ -10,9 +10,11 @@ import { reportSale } from "./actions";
 export function ReportSaleForm({
   cardNumbers,
   cardPrice,
+  allowReservation,
 }: {
   cardNumbers: number[];
   cardPrice: number;
+  allowReservation: boolean;
 }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [selected, setSelected] = useState<number[]>([]);
@@ -21,6 +23,7 @@ export function ReportSaleForm({
     "idle"
   );
   const [errorMsg, setErrorMsg] = useState("");
+  const [reserva, setReserva] = useState(false);
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -29,10 +32,13 @@ export function ReportSaleForm({
     const formData = new FormData(e.currentTarget);
     const buyerName = String(formData.get("buyer_name") || "").trim();
     const file = formData.get("evidence") as File | null;
+    const hasFile = !!file && file.size > 0;
 
-    if (selected.length === 0 || !buyerName || !file || file.size === 0) {
+    if (selected.length === 0 || !buyerName || (!reserva && !hasFile)) {
       setErrorMsg(
-        "Selecciona al menos un cartón, escribe el nombre del comprador y sube la evidencia de pago."
+        reserva
+          ? "Selecciona al menos un cartón y escribe el nombre del comprador."
+          : "Selecciona al menos un cartón, escribe el nombre del comprador y sube la evidencia de pago."
       );
       setStatus("error");
       return;
@@ -56,22 +62,24 @@ export function ReportSaleForm({
       const file = formData.get("evidence") as File;
       formData.delete("evidence");
 
-      const supabase = createClient();
-      const ext = file.name.split(".").pop() || "jpg";
-      const path = `cartones/${crypto.randomUUID()}.${ext}`;
+      if (file.size > 0) {
+        const supabase = createClient();
+        const ext = file.name.split(".").pop() || "jpg";
+        const path = `cartones/${crypto.randomUUID()}.${ext}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from("evidence")
-        .upload(path, file);
+        const { error: uploadError } = await supabase.storage
+          .from("evidence")
+          .upload(path, file);
 
-      if (uploadError) {
-        setErrorMsg(`No se pudo subir la evidencia: ${uploadError.message}`);
-        setStatus("error");
-        setConfirming(false);
-        return;
+        if (uploadError) {
+          setErrorMsg(`No se pudo subir la evidencia: ${uploadError.message}`);
+          setStatus("error");
+          setConfirming(false);
+          return;
+        }
+
+        formData.set("evidence_url", path);
       }
-
-      formData.set("evidence_url", path);
       formData.set("card_numbers", selected.join(","));
 
       const result = await reportSale(formData);
@@ -87,6 +95,7 @@ export function ReportSaleForm({
       setConfirming(false);
       form.reset();
       setSelected([]);
+      setReserva(false);
       setTimeout(() => setStatus("idle"), 3000);
     } catch (err) {
       console.error(err);
@@ -130,6 +139,20 @@ export function ReportSaleForm({
           </label>
         </div>
 
+        {allowReservation && (
+          <label className="flex items-center gap-2 text-sm font-medium text-neutral-700">
+            <input
+              type="checkbox"
+              name="is_reservation"
+              value="true"
+              checked={reserva}
+              onChange={(e) => setReserva(e.target.checked)}
+              className="h-4 w-4"
+            />
+            Reservar sin comprobante (queda pendiente de aprobación)
+          </label>
+        )}
+
         <label className="block">
           <span className="mb-1 block text-sm font-medium text-neutral-700">
             Evidencia de pago (foto)
@@ -138,7 +161,7 @@ export function ReportSaleForm({
             name="evidence"
             type="file"
             accept="image/*,.pdf"
-            required
+            required={!reserva}
             className="input file:mr-4 file:rounded-md file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-white"
           />
         </label>
@@ -162,11 +185,11 @@ export function ReportSaleForm({
 
       {confirming && (
         <ConfirmTotalModal
-          title="Confirma la venta"
+          title={reserva ? "Confirma la reserva" : "Confirma la venta"}
           description="Revisa los cartones y el total que el comprador debe pagar."
           cardNumbers={selected}
           unitPrice={cardPrice}
-          confirmLabel="Confirmar venta"
+          confirmLabel={reserva ? "Confirmar reserva" : "Confirmar venta"}
           loading={status === "loading"}
           onConfirm={confirmSale}
           onCancel={() => setConfirming(false)}

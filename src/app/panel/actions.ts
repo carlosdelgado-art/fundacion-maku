@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { getSettings } from "@/lib/settings";
 
 export async function reportSale(formData: FormData) {
   const supabase = await createClient();
@@ -25,11 +26,20 @@ export async function reportSale(formData: FormData) {
   // ReportSaleForm.tsx) para evitar el limite de 1MB de los Server Actions.
   // Aqui solo recibimos la ruta ya subida en el bucket "evidence".
   const evidenceUrl = String(formData.get("evidence_url") || "").trim();
+  const isReservation = formData.get("is_reservation") === "true";
 
-  if (cardNumbers.length === 0 || !buyerName || !evidenceUrl) {
+  if (isReservation) {
+    const { webSalesVendorId } = await getSettings();
+    if (webSalesVendorId === user.id) {
+      return { error: "El canal de venta web no puede reservar cartones." };
+    }
+  }
+
+  if (cardNumbers.length === 0 || !buyerName || (!isReservation && !evidenceUrl)) {
     return {
-      error:
-        "Selecciona los cartones, escribe el nombre del comprador y sube la evidencia.",
+      error: isReservation
+        ? "Selecciona los cartones y escribe el nombre del comprador."
+        : "Selecciona los cartones, escribe el nombre del comprador y sube la evidencia.",
     };
   }
 
@@ -40,7 +50,7 @@ export async function reportSale(formData: FormData) {
       seller_id: user.id,
       buyer_name: buyerName,
       buyer_phone: buyerPhone || null,
-      evidence_url: evidenceUrl,
+      evidence_url: evidenceUrl || null,
       group_id: groupId,
     }))
   );

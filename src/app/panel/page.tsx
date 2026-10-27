@@ -80,6 +80,7 @@ export default async function PanelPage() {
               <ReportSaleForm
                 cardNumbers={available.map((c) => c.number)}
                 cardPrice={settings.cardPrice}
+                allowReservation={settings.webSalesVendorId !== user!.id}
               />
             ) : (
               <p className="text-sm text-neutral-500">

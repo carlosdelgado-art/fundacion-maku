@@ -61,9 +61,11 @@ export default async function CartonesPage() {
 
   const salesWithUrls = await Promise.all(
     Array.from(groups.entries()).map(async ([key, g]) => {
-      const { data } = await supabase.storage
-        .from("evidence")
-        .createSignedUrl(g.sample.evidence_url, 3600);
+      const { data } = g.sample.evidence_url
+        ? await supabase.storage
+            .from("evidence")
+            .createSignedUrl(g.sample.evidence_url, 3600)
+        : { data: null };
       return {
         ...g.sample,
         key,
@@ -140,6 +142,11 @@ export default async function CartonesPage() {
                     Total: {formatCOP(s.cardNumbers.length * settings.cardPrice)}{" "}
                     ({s.cardNumbers.length} × {formatCOP(settings.cardPrice)})
                   </p>
+                  {!s.evidence_url && (
+                    <p className="mt-2 inline-block rounded bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-700">
+                      Reserva sin comprobante
+                    </p>
+                  )}
                   {s.signedUrl && (
                     <a
                       href={s.signedUrl}

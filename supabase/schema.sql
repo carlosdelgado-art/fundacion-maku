@@ -135,7 +135,7 @@ create table if not exists public.card_sales (
   seller_id uuid not null references public.profiles (id),
   buyer_name text not null,
   buyer_phone text,
-  evidence_url text not null,
+  evidence_url text,
   status text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
   created_at timestamptz not null default now(),
   reviewed_by uuid references public.profiles (id),
@@ -145,6 +145,9 @@ create table if not exists public.card_sales (
 
 -- Cartones comprados en una misma compra (un pago) comparten group_id.
 alter table public.card_sales add column if not exists group_id uuid;
+
+-- Reservas: venta pendiente sin comprobante (evidence_url null). Para tablas ya creadas.
+alter table public.card_sales alter column evidence_url drop not null;
 
 alter table public.card_sales enable row level security;
 

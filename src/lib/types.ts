@@ -36,7 +36,7 @@ export type CardSale = {
   seller_id: string;
   buyer_name: string;
   buyer_phone: string | null;
-  evidence_url: string;
+  evidence_url: string | null;
   status: ReviewStatus;
   group_id: string | null;
   created_at: string;
@@ -129,7 +129,7 @@ export type Database = {
           seller_id: string;
           buyer_name: string;
           buyer_phone?: string | null;
-          evidence_url: string;
+          evidence_url?: string | null;
           status?: ReviewStatus;
           group_id?: string | null;
           reviewed_by?: string | null;
