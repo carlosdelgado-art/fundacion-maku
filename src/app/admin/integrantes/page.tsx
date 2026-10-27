@@ -3,6 +3,7 @@ import { formatCOP } from "@/lib/format";
 import { getSettings } from "@/lib/settings";
 import { CreateVendorForm } from "./CreateVendorForm";
 import { WebSalesVendorForm } from "./WebSalesVendorForm";
+import { ResetVendorPasswordForm } from "./ResetVendorPasswordForm";
 
 export default async function IntegrantesPage() {
   const supabase = await createClient();
@@ -41,6 +42,15 @@ export default async function IntegrantesPage() {
           Crear nuevo integrante
         </h2>
         <CreateVendorForm />
+      </section>
+
+      <section>
+        <h2 className="mb-3 font-semibold text-neutral-900">
+          Restablecer contraseña
+        </h2>
+        <ResetVendorPasswordForm
+          vendors={(vendors ?? []).map((v) => ({ id: v.id, full_name: v.full_name }))}
+        />
       </section>
 
       <section>

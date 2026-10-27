@@ -101,3 +101,38 @@ export async function createVendor(formData: FormData) {
   revalidatePath("/admin/integrantes");
   return { success: true };
 }
+
+export async function resetVendorPassword(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "No autorizado." };
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+  if (profile?.role !== "admin") return { error: "No autorizado." };
+
+  const vendorId = String(formData.get("vendor_id") || "").trim();
+  const password = String(formData.get("password") || "");
+
+  if (!vendorId || password.length < 6) {
+    return { error: "Selecciona un integrante y una contraseña de al menos 6 caracteres." };
+  }
+
+  const admin = createAdminClient();
+  const { data: target } = await admin
+    .from("profiles")
+    .select("role")
+    .eq("id", vendorId)
+    .single();
+  if (target?.role !== "vendedor") return { error: "Integrante no válido." };
+
+  const { error } = await admin.auth.admin.updateUserById(vendorId, { password });
+  if (error) return { error: "No se pudo restablecer la contraseña." };
+
+  return { success: true };
+}
