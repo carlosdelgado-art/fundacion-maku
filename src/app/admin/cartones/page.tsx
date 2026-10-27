@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { AssignRangeForm } from "./AssignRangeForm";
+import { ReassignSoldCardForm } from "./ReassignSoldCardForm";
 import { PrintRangeForm } from "./PrintRangeForm";
 import { approveSale, rejectSale } from "./actions";
 import { getSettings } from "@/lib/settings";
@@ -18,8 +19,12 @@ export default async function CartonesPage() {
   const supabase = await createClient();
   const settings = await getSettings();
 
-  const [{ data: vendors }, { data: cards }, { data: pendingSales }] =
-    await Promise.all([
+  const [
+    { data: vendors },
+    { data: cards },
+    { data: pendingSales },
+    { data: approvedSales },
+  ] = await Promise.all([
       supabase
         .from("profiles")
         .select("id, full_name")
@@ -34,9 +39,28 @@ export default async function CartonesPage() {
         .select("*, profiles!card_sales_seller_id_fkey(full_name)")
         .eq("status", "pending")
         .order("created_at", { ascending: false }),
+      supabase
+        .from("card_sales")
+        .select("card_number, buyer_name")
+        .eq("status", "approved"),
     ]);
 
   const sales = pendingSales ?? [];
+
+  const buyerByCard = new Map<number, string>(
+    (approvedSales ?? []).map(
+      (s) => [s.card_number, s.buyer_name] as [number, string]
+    )
+  );
+  const soldCards = (cards ?? [])
+    .filter((c) => c.status === "sold")
+    .map((c) => ({
+      number: c.number,
+      sellerName:
+        (c.profiles as unknown as { full_name: string } | null)?.full_name ??
+        null,
+      buyerName: buyerByCard.get(c.number) ?? null,
+    }));
 
   // Una compra puede tener varios cartones (mismo group_id). Se agrupan para
   // aprobar o rechazar todo el pago de una vez.
@@ -100,6 +124,13 @@ export default async function CartonesPage() {
           Asignar rango de cartones
         </h2>
         <AssignRangeForm vendors={vendorsWithWebTag} />
+      </section>
+
+      <section>
+        <h2 className="mb-3 font-semibold text-neutral-900">
+          Reasignar venta de cartón vendido
+        </h2>
+        <ReassignSoldCardForm cards={soldCards} vendors={vendors ?? []} />
       </section>
 
       <section>

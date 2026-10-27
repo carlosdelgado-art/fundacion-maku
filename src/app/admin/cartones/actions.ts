@@ -40,6 +40,63 @@ export async function assignRange(formData: FormData) {
   return { success: true, assignedCount: data?.length ?? 0 };
 }
 
+export async function reassignSoldCard(formData: FormData) {
+  const cardNumber = Number(formData.get("card_number"));
+  const vendorId = String(formData.get("vendor_id") || "");
+
+  if (!Number.isInteger(cardNumber) || !vendorId) {
+    return { error: "Selecciona el cartón y el nuevo integrante." };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "No autorizado." };
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+  if (profile?.role !== "admin") return { error: "No autorizado." };
+
+  const { data: vendor } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", vendorId)
+    .single();
+  if (vendor?.role !== "vendedor") return { error: "Integrante no válido." };
+
+  const { data: card } = await supabase
+    .from("bingo_cards")
+    .select("status")
+    .eq("number", cardNumber)
+    .single();
+  if (card?.status !== "sold") {
+    return { error: "Solo se puede reasignar un cartón vendido." };
+  }
+
+  const { error: saleError } = await supabase
+    .from("card_sales")
+    .update({ seller_id: vendorId })
+    .eq("card_number", cardNumber)
+    .eq("status", "approved");
+  if (saleError) return { error: "No se pudo reasignar la venta." };
+
+  const { error: cardError } = await supabase
+    .from("bingo_cards")
+    .update({ assigned_to: vendorId })
+    .eq("number", cardNumber);
+  if (cardError) return { error: "No se pudo reasignar el cartón." };
+
+  revalidatePath("/admin/cartones");
+  revalidatePath("/admin/integrantes");
+  revalidatePath("/admin");
+  revalidatePath("/panel");
+  return { success: true };
+}
+
 function saleIds(formData: FormData) {
   return String(formData.get("ids") || "")
     .split(",")
